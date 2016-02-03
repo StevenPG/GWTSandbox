@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
-<fullyQualifiedTypeName name="stevengantz.memory.MemoryCard"/>
 <fullyQualifiedTypeName name="stevengantz.memory.MemoryCardWriter"/>
+<fullyQualifiedTypeName name="stevengantz.memory.TextCardFace"/>
+<fullyQualifiedTypeName name="stevengantz.memory.MemoryCard"/>
+<fullyQualifiedTypeName name="java.lang.NegativeArraySizeException"/>
+<fullyQualifiedTypeName name="java.util.Collections"/>
+<fullyQualifiedTypeName name="stevengantz.memory.test.MemoryGameBoardTest"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
+<fullyQualifiedTypeName name="java.lang.RuntimeException"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="stevengantz.memory.card.MemoryCard"/>
+<fullyQualifiedTypeName name="stevengantz.memory.card.TextCardFace"/>
 </qualifiedTypeNameHistroy>
