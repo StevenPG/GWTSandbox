@@ -1,0 +1,23 @@
+package stevengantz.memory.test;
+
+import stevengantz.memory.*;
+
+/**
+ * Author: Steven Gantz 
+ * Date: 2/1/2016
+ * Created for CSC421, Dr. Spiegel 
+ * Project Due: 
+ * This file tests the general methods
+ * of the MemoryCard class.
+ **/
+public class MemoryCardTest {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

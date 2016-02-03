@@ -1,0 +1,20 @@
+package stevengantz.memory.test;
+
+/**
+ * Author: Steven Gantz 
+ * Date: 2/1/2016
+ * Created for CSC421, Dr. Spiegel 
+ * Project Due: This file is a container representing a card in memory that is used to
+ * play a card game called Memory.
+ **/
+public class MemoryCardTest {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

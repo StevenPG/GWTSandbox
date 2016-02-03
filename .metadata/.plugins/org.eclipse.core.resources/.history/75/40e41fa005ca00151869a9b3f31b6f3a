@@ -1,0 +1,15 @@
+package stevengantz.memory;
+
+import stevengantz.memory.MemoryGame;
+
+import java.util.ArrayList;
+
+public class CardTest {
+    public static void main(String[] args){
+	
+	MemoryGame game = new MemoryGame(5,6);
+	System.out.println(game.drawBoard());
+	System.out.println(game.guessCard("15");
+    }
+}
+

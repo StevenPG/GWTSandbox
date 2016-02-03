@@ -1,0 +1,42 @@
+package stevengantz.memory;
+
+import stevengantz.memory.MemoryCard;
+import stevengantz.memory.MemoryGameBoard;
+
+import java.util.ArrayList;
+
+/**
+ * Author: Steven Gantz
+ * Date: 2/2/2016
+ * Created for CSC421, Dr. Spiegel
+ * Project Due:
+ * This file is a cotnroller for an Activity game.
+ *
+ * It uses the MemoryCard and MemoryGameBoard classes
+ * to create a MemoryCardGame API that will allow any
+ * user of this class to implement a Memory game making
+ * only calls to this library class.
+ **/
+public class MemoryGame {
+    
+    /**
+     * This attribute contains a memory game board to 
+     * be used throughout the application to reference the game.
+     **/
+    MemoryGameBoard board;
+
+    /**
+     * This constructor will build a memorygame and populate the
+     * game board with memory cards.
+     **/
+    public MemoryGame() {
+	this.board = new MemoryGameBoard(createCardList());
+    }
+
+    /**
+     *
+     **/
+    protected ArrayList<MemoryCard> createCardList(){
+	return new ArrayList<MemoryCard>();
+    }
+}

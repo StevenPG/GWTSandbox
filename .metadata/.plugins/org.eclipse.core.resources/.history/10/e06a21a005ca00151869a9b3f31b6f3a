@@ -1,0 +1,11 @@
+compile: 
+	javac ~/stevengantz/memory/*.java
+
+test:
+	java stevengantz.memory.CardTest
+
+clean:
+	rm -f *.class
+
+backup:
+	cp * ~/Project1Backup

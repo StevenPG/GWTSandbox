@@ -1,0 +1,18 @@
+package stevengantz.memory.test;
+
+import java.util.ArrayList;
+
+import stevengantz.memory.card.MemoryCard;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file tests the memory game board class.
+ **/
+public class MemoryGameBoardTest {
+	public static void main(String[] args) {
+		ArrayList<MemoryCard> cardList = new ArrayList<MemoryCard>();
+	}
+}

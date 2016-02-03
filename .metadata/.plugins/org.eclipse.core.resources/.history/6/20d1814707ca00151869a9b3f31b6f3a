@@ -1,0 +1,104 @@
+package stevengantz.memory;
+
+import stevengantz.memory.MemoryCard;
+import stevengantz.memory.MemoryGameBoard;
+
+import java.util.ArrayList;
+
+/**
+ * Author: Steven Gantz
+ * Date: 2/2/2016
+ * Created for CSC421, Dr. Spiegel
+ * Project Due:
+ * This file is a cotnroller for an Activity game.
+ *
+ * It uses the MemoryCard and MemoryGameBoard classes
+ * to create a MemoryCardGame API that will allow any
+ * user of this class to implement a Memory game making
+ * only calls to this library class.
+ **/
+public class MemoryGame {
+    
+    /**
+     * This attribute contains a memory game board to 
+     * be used throughout the application to reference the game.
+     **/
+    protected MemoryGameBoard board;
+
+    /**
+     * The row and columns for the game.
+     **/
+    protected int row, column;
+
+    /**
+     * The first and second card chosen by the guess method.
+     **/
+    protected MemoryCard card1;
+    protected MemoryCard card2;
+
+    /**
+     * This constructor will build a memorygame and populate the
+     * game board with memory cards.
+     **/
+    public MemoryGame(int row, int column) {
+	this.board = new MemoryGameBoard(createCardList());
+	this.row = row;
+	this.column = column;
+
+	// Initialize the guessed cards to null
+	this.card1 = null;
+	this.card2 = null;
+    }
+
+    /**
+     * This method allows the caller 
+     * to select which card they
+     * would like to select.
+     **/
+    protected String guessCard(String choice){
+	return this.board.get(Integer.parseInt(choice)).getSymbol();
+    }
+    
+    /**
+     * Return the board as a string to the caller
+     **/
+    public String drawBoard(){
+	return this.board.drawBoard(this.row, this.column);
+    }
+
+    /**
+     * This method will create the cardList that will
+     * make up the game board.
+     **/
+    protected ArrayList<MemoryCard> createCardList(){
+	ArrayList<MemoryCard> cardList =
+	    new ArrayList<MemoryCard>();
+	
+	// Create a collection of numbers to randomly assign
+	ArrayList<String> cardBack =
+	    new ArrayList<String>();
+	for(int i = 0; i < cardList.size(); i++){
+	    if(i < 10)
+		cardBack.add("0" + i);
+	    else
+		cardBack.add(new Integer(i).toString());
+	}
+
+	cardList.add(new MemoryCard("AA", "01", false));
+	cardList.add(new MemoryCard("BB", "02", false));
+	cardList.add(new MemoryCard("CC", "03", false));
+	cardList.add(new MemoryCard("DD", "04", false));
+	cardList.add(new MemoryCard("EE", "05", false));
+	cardList.add(new MemoryCard("FF", "06", false));
+        cardList.add(new MemoryCard("GG", "07", false));
+        cardList.add(new MemoryCard("HH", "08", false));
+        cardList.add(new MemoryCard("II", "09", false));
+        cardList.add(new MemoryCard("JJ", "10", false));
+	cardList.add(new MemoryCard("KK", "12", false));
+        cardList.add(new MemoryCard("LL", "13", false));
+        cardList.add(new MemoryCard("MM", "14", false));
+        cardList.add(new MemoryCard("NN", "15", false));
+	cardList.add(new MemoryCard("OO", "16", false));
+	return cardList;
+    }
+}

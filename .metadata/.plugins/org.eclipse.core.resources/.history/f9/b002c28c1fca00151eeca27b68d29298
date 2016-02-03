@@ -1,0 +1,54 @@
+package stevengantz.memory;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file is a container that represents a card used to play the card game
+ *       memory.
+ **/
+public class MemoryCard {
+
+	private CardFace frontFace;
+	private CardFace rearFace;
+	private boolean faceUp;
+
+	/**
+	 * General constructor that builds a memory card with two faces, a front and
+	 * rear.
+	 * 
+	 * @param frontFace
+	 *            Front face of the Memory Card
+	 * @param rearFace
+	 *            Rear face of the Memory Card
+	 */
+	public MemoryCard(CardFace frontFace, CardFace rearFace) {
+		this.frontFace = frontFace;
+		this.rearFace = rearFace;
+		this.faceUp = false;
+	}
+	
+	
+
+	/**
+	 * Create a real copy of the memory card (hard copy) rather than copying the
+	 * reference itself (soft copy).
+	 * 
+	 * @return new MemoryCard that is identical to the calling MemoryCard
+	 */
+	public MemoryCard copyCard() {
+		return new MemoryCard(this.frontFace, this.rearFace);
+	}
+	
+	public boolean equals(MemoryCard mem){
+		// Make sure the types are correct
+		if(!(mem instanceof MemoryCard)) {
+			return false;
+		}
+		
+		//TODO - compare the two cards
+		return false; //TODO
+	}
+	
+}

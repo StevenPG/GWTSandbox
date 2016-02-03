@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package stevengantz.memory.structure;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/X/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This class is tightly coupled with the text based Memory Game
+ *       implementation. This class implements the actual game simulation and
+ *       has simple calls that display the contents of the game to the console
+ *       after each call.
+ **/
+public class MemoryGameTextDriver {
+	
+	
+	
+}

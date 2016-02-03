@@ -1,0 +1,24 @@
+package stevengantz.memory.test;
+
+import stevengantz.memory.MemoryCard;
+import stevengantz.memory.TextCardFace;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file tests the memory card class.
+ **/
+public class MemoryCardTest {
+	public static void main(String[] args){
+		System.out.println("Start Memory Card Test");
+		
+		MemoryCard mem = new MemoryCard(new TextCardFace("A"), new TextCardFace("-"));
+		System.out.println(mem.getFrontFace());
+		System.out.println(mem.getRearFace());
+		System.out.println(mem.isFaceUp());
+		System.out.println(mem.getRearFace());
+		System.out.println("End Memory Card Test");
+	}
+}

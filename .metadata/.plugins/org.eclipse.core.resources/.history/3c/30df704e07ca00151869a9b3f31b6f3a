@@ -1,0 +1,134 @@
+package stevengantz.memory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import stevengantz.memory.MemoryCard;
+
+/**
+ * Author: Steven Gantz
+ * Date: 2/2/2016
+ * Created for CSC421, Dr. Spiegel
+ * Project Due:
+ * This file is a container representing a game board
+ * used to organize and represent cards in the game
+ * called memory.
+ **/
+public class MemoryGameBoard {
+    
+    /**
+     * This attribute holds the internal
+     * representation of the game board.
+     **/
+    private ArrayList<MemoryCard> board;
+
+    /**
+     * General use case constructor, pass in a list
+     * of all possible pairs, to be duplicated and stored.
+     **/
+    public MemoryGameBoard(ArrayList<MemoryCard> cardList) {
+	// Build board to be filled
+	this.board = new ArrayList<MemoryCard>();
+	
+	// Duplicate cardList for the other half of pairs
+	ArrayList<MemoryCard> pairs = new ArrayList<MemoryCard>();
+	for( MemoryCard mem : cardList){
+	    pairs.add(mem.copyCard());
+	}
+
+	// Use java.util.Collections interface to shuffle pairs
+	Collections.shuffle(cardList);
+        Collections.shuffle(pairs);
+	
+	// Add shuffled duplicate lists into board
+	this.board.addAll(cardList);
+	this.board.addAll(pairs);
+
+	// Shuffle the entire board one time
+	Collections.shuffle(this.board);
+    }
+
+    /**
+     * Return the board as a string for debugging
+     * This code copies the list into a local list,
+     * and flips all of the cards. It then puts them
+     * into a string.
+     **/
+    public String toString(){
+
+	ArrayList<MemoryCard> faceUpBoard = new ArrayList<MemoryCard>();
+	for(MemoryCard mem : this.board){
+	    faceUpBoard.add(mem.copyCard());
+	}				      
+	
+	// flip all face-down cards
+	boolean[] states = new boolean[faceUpBoard.size()];
+	for(int i = 0; i < faceUpBoard.size(); i++){
+	    boolean faceUp = faceUpBoard.get(i).isFaceUp();
+	    states[i] = faceUp;
+	    if(!faceUp){
+		faceUpBoard.get(i).flip();
+	    }
+	}
+	
+	// Generate string with a newline after every n cards
+	int n = 6;
+	StringBuilder builder = new StringBuilder();
+	for( int i = 0; i < faceUpBoard.size(); i++){
+	    // Add the card visual to the string
+	    builder.append(faceUpBoard.get(i).draw());
+
+	    // Make a new row every nth card
+	    if(i%n==0 && i!=0)
+		builder.append("\n");
+	}
+
+	// Add final \n
+	builder.append("\n");
+	
+	
+
+	// Return the created debug string (may be jagged) for debugging
+	return builder.toString();
+    }
+    
+    /**
+     * Rows and columns are passed in to play customized games
+     * An exception is thrown if row*column is not equal to the board size.
+     * Due to the fact that the board is doubled, the value will always be even.
+     **/
+    public String drawBoard(int row, int column){
+	StringBuilder builder = new StringBuilder();
+        for( int i = 1; i < this.board.size(); i++){
+            builder.append(this.board.get(i).draw());
+
+            // Make a new row every nth card
+            if(i%row == 0)
+                builder.append("\n");
+        }
+
+	// Due to using the modulo operator, 0 is an edge case.
+	// It will always cause the array to be jagged, so we
+	// add it at the end.
+	builder.append(this.board.get(0).draw());
+
+	return builder.toString();
+    }
+
+    /**
+     * This method returns the card at the specified
+     * located in the list for easy access and reading.
+     **/
+    public MemoryCard get(int card){
+	return board.get(card);
+    }
+
+    /**
+     * This method returns the total cards
+     * on the board for debugging.
+     **/
+    public int totalCards(){
+	return this.board.size();
+    }
+}
+

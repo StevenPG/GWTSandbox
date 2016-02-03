@@ -1,0 +1,22 @@
+Steven Gantz
+
+List of Classes:
+stevengantz.memory.MemoryCard.java
+stevengantz.memory.MemoryGameBoard.java
+
+Class notes:
+MemoryCard.java:
+	Description: This class contains a memory card as per the project requirements.
+	1. This class is functionally immutable, the only mutable value is the ability to
+	   flip a card. Internally, this just flips a boolean that determines what gets printed.
+	2. Memorycards are able to be drawn as a card based on this boolean bit.
+
+MemoryGameBoard:
+	Description: This class contains an object representation of a memory game board.
+	1. Rather than using a 2D array, the game board is internally held with one
+	   arraylist, allowing for any size game to be played based on the initial cardList.
+	   Passing 20 cards in will create a 40 card game, while passing 10 will create a 20
+	   card game.
+	2. The game does not care if the caller passes duplicate cards. This is just considered
+	   an easy mode as there would be 4 of each card instead of 2, making a higher chance
+	   for a match.

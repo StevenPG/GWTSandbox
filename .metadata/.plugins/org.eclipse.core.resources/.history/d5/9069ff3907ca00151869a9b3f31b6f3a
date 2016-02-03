@@ -1,0 +1,23 @@
+package stevengantz.memory.test;
+
+import stevengantz.memory.MemoryCard;
+import stevengantz.memory.MemoryCardWriter;
+
+/**
+ * Author: Steven Gantz 
+ * Date: 2/1/2016
+ * Created for CSC421, Dr. Spiegel 
+ * Project Due: 
+ * This file tests the general methods
+ * of the MemoryCard class.
+ **/
+public class MemoryCardTest {
+
+	public static void main(String[] args) {
+		MemoryCard mem = new MemoryCard(
+				"2", "-", false);
+		MemoryCardWriter writer = new MemoryCardWriter(mem);
+		
+	}
+
+}

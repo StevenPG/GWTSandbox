@@ -1,0 +1,13 @@
+package stevengantz.memory.cli;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file is a utility class that writes the structure of the game board
+ *       that is passed into the object.
+ **/
+public class MemoryGameBoardWriter {
+		
+}

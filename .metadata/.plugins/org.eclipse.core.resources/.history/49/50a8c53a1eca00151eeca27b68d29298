@@ -1,0 +1,15 @@
+package stevengantz.memory;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file is a container that represents a card used to play the card game
+ *       memory.
+ **/
+public class MemoryCard {
+	
+	private CardFace frontFace;
+	private CardFace rearFace;
+}

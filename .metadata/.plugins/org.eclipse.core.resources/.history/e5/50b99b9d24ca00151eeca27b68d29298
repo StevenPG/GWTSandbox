@@ -1,0 +1,12 @@
+package stevengantz.memory.test;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file tests the memory game board class.
+ **/
+public class MemoryGameBoardTest {
+
+}
