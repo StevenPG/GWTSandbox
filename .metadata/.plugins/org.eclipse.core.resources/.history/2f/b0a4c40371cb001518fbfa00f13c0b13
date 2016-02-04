@@ -1,0 +1,15 @@
+package stevengantz.memory.structure;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/X/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file is a container for all data that may need to be stored and
+ *       accessed within a Memory game.
+ **/
+public class MemoryGameState {
+	private int totalMatches;
+	private int totalAttempts;
+	private 
+}

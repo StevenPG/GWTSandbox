@@ -38,7 +38,7 @@ public class MemoryGameBoardWriter {
 		for (int i = 1; i < board.totalCards(); i++) {
 			// if the card is face down, put a number for selection
 			if (board.getCard(i).isFaceUp())
-				builder.append("{" + board.getCard(i).toString() + "}");
+				builder.append("[" + board.getCard(i).toString() + "]");
 			else if (i < 10)
 				builder.append("[0" + i + "]");
 			else

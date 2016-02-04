@@ -89,11 +89,9 @@ public class MemoryGameTextDriver {
 				this.printCardIsPaired();
 				return;
 			}
-			// If it is the same card, flip it back and move on
+			// If it is the same card, don't flip it back
 			else if (card2 == card1) {
 				System.out.println("You just selected the same card...");
-				System.out.println("Since you're so clever, you can redo your turn...");
-				card1.flip();
 				return;
 			} else {
 				// Flip the card and draw the board
@@ -146,21 +144,19 @@ public class MemoryGameTextDriver {
 	}
 
 	private void printCardIsPaired() {
-		System.out.println("\nCard is already paired! Try Again.\n");
+		System.out.println("Card is already paired! Try Again.\n");
 	}
 
 	private void printNoMatch() {
-		System.out.println("\nNo Match! Try Again.");
+		System.out.println("No Match! Try Again.");
 		this.state.addAttempt();
 		System.out.println(
 				"Total guess attempts: " + this.state.getTotalAttempts());
-		System.out.println(
-				"Total matches: " + this.state.getTotalMatches());
 		System.out.print("\n");
 	}
 
 	private void printMatch() {
-		System.out.println("\nSuccessful match! Pair Found.");
+		System.out.println("Successful match! Pair Found.");
 
 		this.state.addAttempt();
 		System.out.println(
@@ -169,7 +165,7 @@ public class MemoryGameTextDriver {
 		this.state.addMatch();
 		System.out.println(
 				"Total matches: " + this.state.getTotalMatches());
-		System.out.print("\n");
+
 	}
 
 	/**

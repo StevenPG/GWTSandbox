@@ -89,11 +89,9 @@ public class MemoryGameTextDriver {
 				this.printCardIsPaired();
 				return;
 			}
-			// If it is the same card, flip it back and move on
+			// If it is the same card, don't flip it back
 			else if (card2 == card1) {
 				System.out.println("You just selected the same card...");
-				System.out.println("Since you're so clever, you can redo your turn...");
-				card1.flip();
 				return;
 			} else {
 				// Flip the card and draw the board
