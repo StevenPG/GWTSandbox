@@ -35,7 +35,7 @@ public class TextCardFace implements CardFace {
 	 */
 	@Override
 	public String toString() {
-		return this.cardFace;
+		return new String(this.cardFace);
 	}
 
 }

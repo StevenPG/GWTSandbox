@@ -59,55 +59,72 @@ public class MemoryGameTextDriver {
 	 * 
 	 * @throws Exception
 	 */
-	public void playTurn() throws Exception {
+	public void playTurn() {
 		if (!gameStarted)
 			throw new RuntimeException();
+		try{
+			// Draw the board and ask the user for input
+			MemoryGameBoardWriter.drawBoard(this.board, this.row, this.column);
+			MemoryCard card1 = getUserChoice();
+			if (this.isCardPaired(card1)) {
+				this.printCardIsPaired();
+			}
+			else{
+				// Flip the card and draw the board
+				card1.flip();
+			}
+	
+			MemoryGameBoardWriter.drawBoard(this.board, this.row, this.column);
+	
+			// Ask the user for their second choice, flip, and draw the board
+			MemoryCard card2 = getUserChoice();
+			if (this.isCardPaired(card2)) {
+				this.printCardIsPaired();
+				return;
+			}
+			// If it is the same card, don't flip it back
+			else if(card2 == card1){
+				System.out.println("You just selected the same card...");
+				return;
+			}
+			else{
+				// Flip the card and draw the board
+				card2.flip();
+			}
+			
+			MemoryGameBoardWriter.drawBoard(this.board, this.row, this.column);
+	
+			// If cards are a match, print success message and lock as pair linked
+			if (card1.equals(card2) && card1 != card2) {
+				this.printMatch();
+				card1.lockInPair(card2);
+				card2.lockInPair(card1);
+			}
+			// If cards arent match, print failed message and flip back
+			else {
+				this.printNoMatch();
+				card1.flip();
+				card2.flip();
+			}
+			
+			// Check for win condition
+			// all cards have to have the "paired" attribute set
+			if(this.board.checkIfBoardIsAllPairs()){
+				System.out.println("You won!");
+				System.exit(0);
+			}
+		} catch(Exception e){
+			System.out.println("You caused the program to get angry.");
+			System.out.println("Please never do what you just did, EVER again.");
+			System.out.println("Since you might be Dr. Spiegel testing this code,");
+			System.out.println("I guess I'll just start another turn for you.\n");
 
-		// Draw the board and ask the user for input
-		MemoryGameBoardWriter.drawBoard(this.board, this.row, this.column);
-		MemoryCard card1 = getUserChoice();
-		if (this.isCardPaired(card1)) {
-			this.printCardIsPaired();
-		}
-		else{
-			// Flip the card and draw the board
-			card1.flip();
-		}
-
-		MemoryGameBoardWriter.drawBoard(this.board, this.row, this.column);
-
-		// Ask the user for their second choice, flip, and draw the board
-		MemoryCard card2 = getUserChoice();
-		if (this.isCardPaired(card2)) {
-			this.printCardIsPaired();
-		}
-		// If it is the same card, don't flip it back
-		else if(card2 == card1){
-			System.out.println("You just selected the same card...");
-			return;
-		}
-		else{
-			// Flip the card and draw the board
-			card2.flip();
-		}
-		
-		MemoryGameBoardWriter.drawBoard(this.board, this.row, this.column);
-
-		// If cards are a match, print success message and lock as pair linked
-		if (card1.equals(card2) && card1 != card2) {
-			this.printMatch();
-			card1.lockInPair(card2);
-			card2.lockInPair(card1);
-		}
-		// If cards arent match, print failed message and flip back
-		else {
-			this.printNoMatch();
-			card1.flip();
-			card2.flip();
 		}
 	}
 
 	// Internal helper methods ----------------------------
+	
+	
 
 	private boolean isCardPaired(MemoryCard mem) {
 		// Card is not paired
@@ -135,7 +152,7 @@ public class MemoryGameTextDriver {
 	 * 
 	 * @return the actual card chosen by the user
 	 */
-	private MemoryCard getUserChoice() {
+	private MemoryCard getUserChoice() throws Exception{
 		// Display question to user
 		System.out.print("Select a card: ");
 
@@ -165,7 +182,7 @@ public class MemoryGameTextDriver {
 		if (choice == 30)
 			choice = 0;
 
-		if(choice > this.board.totalCards() || choice < 1){
+		if(choice > this.board.totalCards() || choice < 0){
 			System.out.println("That isn't a valid option");
 			System.out.println("Try Again");
 			while(choice > this.board.totalCards() || choice < 1){
@@ -189,6 +206,7 @@ public class MemoryGameTextDriver {
 	 */
 	private void buildBoard() {
 		this.board = new MemoryGameBoard(this.buildCardList());
+		this.board.randomizeBoard();
 	}
 
 	/**

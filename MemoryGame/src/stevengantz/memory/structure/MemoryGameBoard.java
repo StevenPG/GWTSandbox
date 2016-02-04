@@ -41,9 +41,22 @@ public class MemoryGameBoard {
 		// Join the lists together to form the game board
 		this.board.addAll(cardList);
 		this.board.addAll(pairs);
-
-		// Use the java.util.Collections interface to shuffle
+	}
+	
+	public void randomizeBoard(){
 		Collections.shuffle(this.board);
+	}
+	
+	public boolean checkIfBoardIsAllPairs(){
+		boolean gameOver = false;
+		for(MemoryCard mem : this.board){
+			if(mem.getPairedCard() == null){
+				return gameOver;
+			}
+		}
+		
+		return true;
+		
 	}
 
 	/**

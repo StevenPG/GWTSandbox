@@ -1,5 +1,8 @@
 package stevengantz.memory.cli;
 
+import java.util.ArrayList;
+
+import stevengantz.memory.card.MemoryCard;
 import stevengantz.memory.structure.MemoryGameBoard;
 
 /**
@@ -68,16 +71,28 @@ public class MemoryGameBoardWriter {
 		if ((row * column) != board.totalCards())
 			throw new RuntimeException();
 
+		// Create an entirely new list to print
+		ArrayList<MemoryCard> cardList = new ArrayList<MemoryCard>();
+		for(int i = 0; i < board.totalCards(); i++){
+			MemoryCard mem = board.getCard(i);
+			if(cardList.contains(mem))
+				continue;
+			else
+				cardList.add(mem.copyCard());
+		}
+		
+		//Overwrite the original board with the copy
+		board = new MemoryGameBoard(cardList);
+		
 		StringBuilder builder = new StringBuilder();
 		for (int i = 1; i < board.totalCards(); i++) {
 			// if the card is face down, put a number for selection
 			if (board.getCard(i).isFaceUp())
 				builder.append("[" + board.getCard(i).toString() + "]");
-			else
+			else if(!board.getCard(i).isFaceUp())
 				board.getCard(i).flip();
 				builder.append("[" + board.getCard(i).toString() + "]");
 				board.getCard(i).flip();
-
 			// Make a new row every column number of cards
 			if (i % column == 0)
 				builder.append("\n");
