@@ -16,7 +16,6 @@ public class Memory {
 		MemoryGameTextDriver driver = new MemoryGameTextDriver(6, 5);
 		driver.beginGame();
 		try {
-			// 
 			System.out.println("Welcome to Memory!!\n");
 			while(true){
 				driver.playTurn();

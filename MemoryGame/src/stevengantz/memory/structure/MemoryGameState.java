@@ -9,18 +9,35 @@ package stevengantz.memory.structure;
  *       accessed within a Memory game.
  **/
 public class MemoryGameState {
+
+	/**
+	 * Total number of matches up to called point in game
+	 */
 	private int totalMatches;
+
+	/**
+	 * Total number of times the user played a turn
+	 */
 	private int totalAttempts;
 
+	/**
+	 * General constructor initializes values at 0
+	 */
 	public MemoryGameState() {
 		this.totalAttempts = 0;
 		this.totalMatches = 0;
 	}
 
+	/**
+	 * Increment how many matched pairs exist within the current game session
+	 */
 	public void addMatch() {
 		this.totalMatches += 1;
 	}
 
+	/**
+	 * Increment how many times the user has played a turn
+	 */
 	public void addAttempt() {
 		this.totalAttempts += 1;
 	}

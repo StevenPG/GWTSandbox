@@ -42,21 +42,30 @@ public class MemoryGameBoard {
 		this.board.addAll(cardList);
 		this.board.addAll(pairs);
 	}
-	
-	public void randomizeBoard(){
+
+	/**
+	 * Shuffle the board around using the collections interface
+	 */
+	public void randomizeBoard() {
 		Collections.shuffle(this.board);
 	}
-	
-	public boolean checkIfBoardIsAllPairs(){
+
+	/**
+	 * Check winning condition. Iterate through the cards on the board and check
+	 * if they are all a part of a pair.
+	 * 
+	 * @return whether the game is over
+	 */
+	public boolean checkIfBoardIsAllPairs() {
 		boolean gameOver = false;
-		for(MemoryCard mem : this.board){
-			if(mem.getPairedCard() == null){
+		for (MemoryCard mem : this.board) {
+			if (mem.getPairedCard() == null) {
 				return gameOver;
 			}
 		}
-		
+
 		return true;
-		
+
 	}
 
 	/**

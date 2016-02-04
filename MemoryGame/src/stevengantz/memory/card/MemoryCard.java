@@ -10,11 +10,29 @@ package stevengantz.memory.card;
  **/
 public class MemoryCard {
 
-	// TODO
+	/**
+	 * Front face of the memory card This face is the face to check for matches
+	 */
 	private CardFace frontFace;
+
+	/**
+	 * Rear face of the memoy card
+	 */
 	private CardFace rearFace;
+
+	/**
+	 * Whether the card is front-face-up or not
+	 */
 	private boolean faceUp;
+
+	/**
+	 * Whether the card has been paired with another card.
+	 */
 	private boolean paired;
+
+	/**
+	 * Direct reference to the paired card, null if not paired.
+	 */
 	private MemoryCard pairedCard;
 
 	/**

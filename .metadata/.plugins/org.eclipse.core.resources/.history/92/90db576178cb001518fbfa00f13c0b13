@@ -1,0 +1,30 @@
+Steven Gantz
+
+How To Play:
+	To play, enter a value at the prompt when shown.
+	Here are the gameplay steps:
+	1. Select a card from the numbered grid
+	2. Select a second card to guess if it is identical.
+	3. Read output, and use your memory to decide on your next card.
+	4. Repeat 1-3 until the game is over.
+	
+	Note:
+		Entering -2 will end the game prematurely.
+		You may cheat because the game is too hard by entering -1.
+			(Be careful, the game is unaware you are cheating and might get confused)
+			(It will undoubtedly recover and work fine though)
+
+List of Classes with short description:
+	
+	stevengantz\
+		memory\
+			card\
+			cli\
+			docs\
+			spiegel\
+			structure\
+			test\
+				MemoryCardTest.java - Short method testing class for the MemoryCard object
+				MemoryGameBoardTest.java - Short method testing class for the MemoryGameBoard object
+
+	

@@ -8,12 +8,14 @@
 <fullyQualifiedTypeName name="stevengantz.memory.test.MemoryGameBoardTest"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="java.lang.StringBuilder"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="stevengantz.memory.card.MemoryCard"/>
 <fullyQualifiedTypeName name="stevengantz.memory.card.TextCardFace"/>
 <fullyQualifiedTypeName name="java.lang.RuntimeException"/>
 <fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameTextDriver"/>
 <fullyQualifiedTypeName name="stevengantz.memory.cli.MemoryGameBoardWriter"/>
 <fullyQualifiedTypeName name="stevengantz.memory.spiegel.Input.InputReader"/>
 <fullyQualifiedTypeName name="stevengantz.memory.spiegel.SpiegelCode"/>
+<fullyQualifiedTypeName name="stevengantz.memory.card.MemoryCard"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameBoard"/>
+<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameState"/>
 </qualifiedTypeNameHistroy>

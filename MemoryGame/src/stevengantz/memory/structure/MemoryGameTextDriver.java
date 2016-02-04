@@ -92,7 +92,8 @@ public class MemoryGameTextDriver {
 			// If it is the same card, flip it back and move on
 			else if (card2 == card1) {
 				System.out.println("You just selected the same card...");
-				System.out.println("Since you're so clever, you can redo your turn...");
+				System.out.println(
+						"Since you're so clever, you can redo your turn...");
 				card1.flip();
 				return;
 			} else {
@@ -136,6 +137,11 @@ public class MemoryGameTextDriver {
 
 	// Internal helper methods ----------------------------
 
+	/**
+	 * Ask if the card passed in if it has a paired card
+	 * @param mem the card to check if it is a member of a pair
+	 * @return whether or not the card is a member of a pair
+	 */
 	private boolean isCardPaired(MemoryCard mem) {
 		// Card is not paired
 		if (mem.getPairedCard() == null) {
@@ -145,20 +151,29 @@ public class MemoryGameTextDriver {
 		}
 	}
 
+	/**
+	 * Simple helper method that displays a present string
+	 */
 	private void printCardIsPaired() {
 		System.out.println("\nCard is already paired! Try Again.\n");
 	}
 
+	/**
+	 * Simple helper method that displays a present string and makes data
+	 * changes where necessary.
+	 */
 	private void printNoMatch() {
 		System.out.println("\nNo Match! Try Again.");
 		this.state.addAttempt();
 		System.out.println(
 				"Total guess attempts: " + this.state.getTotalAttempts());
-		System.out.println(
-				"Total matches: " + this.state.getTotalMatches());
+		System.out.println("Total matches: " + this.state.getTotalMatches());
 		System.out.print("\n");
 	}
 
+	/**
+	 * Simple helper method that displays a present string
+	 */
 	private void printMatch() {
 		System.out.println("\nSuccessful match! Pair Found.");
 
@@ -167,8 +182,7 @@ public class MemoryGameTextDriver {
 				"Total guess attempts: " + this.state.getTotalAttempts());
 
 		this.state.addMatch();
-		System.out.println(
-				"Total matches: " + this.state.getTotalMatches());
+		System.out.println("Total matches: " + this.state.getTotalMatches());
 		System.out.print("\n");
 	}
 
@@ -218,6 +232,12 @@ public class MemoryGameTextDriver {
 		return board.getCard(choice);
 	}
 
+	/**
+	 * This method draws a debug version of the game board for the player to
+	 * cheat with.
+	 * 
+	 * @throws Exception
+	 */
 	private void engageSneakyCheat() throws Exception {
 		System.out.println("That's a weird input...");
 		MemoryGameBoardWriter.drawCheatBoard(this.board, this.row, this.column);
