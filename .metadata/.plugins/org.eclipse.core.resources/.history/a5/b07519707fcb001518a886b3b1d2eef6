@@ -92,7 +92,7 @@ public class MemoryGameBoard {
 	}
 	
 	public ArrayList<MemoryCard> getOriginalCardList(){
-		return this.originalCardList;
+		
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class MemoryGameBoard {
 		// Copy the cards into a new list of references to add to the board
 		ArrayList<MemoryCard> cards = new ArrayList<MemoryCard>();
 		for (MemoryCard mem : cardList) {
-			cards.add(mem.copyCard());
+			pairs.add(mem.copyCard());
 		}
 		
 		// Duplicate cardlist to create pairs for game
@@ -51,7 +51,7 @@ public class MemoryGameBoard {
 		}
 
 		// Join the lists together to form the game board
-		this.board.addAll(cards);
+		this.board.addAll(cardList);
 		this.board.addAll(pairs);
 	}
 
@@ -92,7 +92,7 @@ public class MemoryGameBoard {
 	}
 	
 	public ArrayList<MemoryCard> getOriginalCardList(){
-		return this.originalCardList;
+		
 	}
 
 	/**

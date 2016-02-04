@@ -72,7 +72,7 @@ public class MemoryGameBoardWriter {
 		if ((row * column) != board.totalCards())
 			throw new RuntimeException();
 
-		// Create an entirely new board to print using the original cards
+		// Create an entirely new board to print from the original cards
 		ArrayList<MemoryCard> cardList = board.getOriginalCardList();
 
 		// Overwrite the original board with the copy

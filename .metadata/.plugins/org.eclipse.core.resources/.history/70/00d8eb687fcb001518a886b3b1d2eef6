@@ -51,7 +51,7 @@ public class MemoryGameBoard {
 		}
 
 		// Join the lists together to form the game board
-		this.board.addAll(cards);
+		this.board.addAll(cardList);
 		this.board.addAll(pairs);
 	}
 
@@ -92,7 +92,7 @@ public class MemoryGameBoard {
 	}
 	
 	public ArrayList<MemoryCard> getOriginalCardList(){
-		return this.originalCardList;
+		
 	}
 
 	/**

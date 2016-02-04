@@ -72,8 +72,15 @@ public class MemoryGameBoardWriter {
 		if ((row * column) != board.totalCards())
 			throw new RuntimeException();
 
-		// Create an entirely new board to print using the original cards
-		ArrayList<MemoryCard> cardList = board.getOriginalCardList();
+		// Create an entirely new list to print
+		ArrayList<MemoryCard> cardList = new ArrayList<MemoryCard>();
+		for (int i = 0; i < board.totalCards(); i++) {
+			MemoryCard mem = board.getCard(i);
+			if (cardList.contains(mem))
+				continue;
+			else
+				cardList.add(mem.copyCard());
+		}
 
 		// Overwrite the original board with the copy
 		MemoryGameBoard debugBoard = new MemoryGameBoard(cardList);

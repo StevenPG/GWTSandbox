@@ -24,7 +24,6 @@ public class MemoryGameBoard {
 	/**
 	 * The original card list for possible UI elements
 	 */
-	private ArrayList<MemoryCard> originalCardList;
 
 	/**
 	 * General use case constructor, pass in a list of all possible cards to be
@@ -34,16 +33,9 @@ public class MemoryGameBoard {
 	 *            List of all cards to be duplicated for the game
 	 */
 	public MemoryGameBoard(ArrayList<MemoryCard> cardList) {
-		// Generate the board to be built and save the cardList
+		// Generate the board to be built
 		this.board = new ArrayList<MemoryCard>();
-		this.originalCardList = cardList;
 
-		// Copy the cards into a new list of references to add to the board
-		ArrayList<MemoryCard> cards = new ArrayList<MemoryCard>();
-		for (MemoryCard mem : cardList) {
-			cards.add(mem.copyCard());
-		}
-		
 		// Duplicate cardlist to create pairs for game
 		ArrayList<MemoryCard> pairs = new ArrayList<MemoryCard>();
 		for (MemoryCard mem : cardList) {
@@ -51,7 +43,7 @@ public class MemoryGameBoard {
 		}
 
 		// Join the lists together to form the game board
-		this.board.addAll(cards);
+		this.board.addAll(cardList);
 		this.board.addAll(pairs);
 	}
 
@@ -92,7 +84,7 @@ public class MemoryGameBoard {
 	}
 	
 	public ArrayList<MemoryCard> getOriginalCardList(){
-		return this.originalCardList;
+		
 	}
 
 	/**
