@@ -106,6 +106,10 @@ public class MemoryGameBoard {
 	public ArrayList<MemoryCard> getOriginalCardList() {
 		return this.originalCardList;
 	}
+
+	public MemoryGameBoard copyBoard(){
+		
+	}
 	
 	/**
 	 * This method returns the total number of cards on the board

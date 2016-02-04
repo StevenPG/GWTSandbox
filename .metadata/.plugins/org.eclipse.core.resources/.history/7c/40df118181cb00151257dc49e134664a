@@ -54,15 +54,6 @@ public class MemoryGameBoard {
 		this.board.addAll(cards);
 		this.board.addAll(pairs);
 	}
-	
-	/**
-	 * Secondary constructor that can be used to build a game board manually
-	 * Small code smell, boolean causes header to be unique and cuts down on 
-	 * 	manually code handling.
-	 */
-	public MemoryGameBoard(ArrayList<MemoryCard> completedBoard, boolean unique){
-		this.board = completedBoard;
-	}
 
 	/**
 	 * Shuffle the board around using the collections interface
@@ -105,6 +96,10 @@ public class MemoryGameBoard {
 	 */
 	public ArrayList<MemoryCard> getOriginalCardList() {
 		return this.originalCardList;
+	}
+
+	public MemoryGameBoard copyBoard(){
+		
 	}
 	
 	/**

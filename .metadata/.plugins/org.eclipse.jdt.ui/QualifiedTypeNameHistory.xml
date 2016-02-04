@@ -16,6 +16,6 @@
 <fullyQualifiedTypeName name="stevengantz.memory.spiegel.SpiegelCode"/>
 <fullyQualifiedTypeName name="stevengantz.memory.card.MemoryCard"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameBoard"/>
 <fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameState"/>
+<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameBoard"/>
 </qualifiedTypeNameHistroy>

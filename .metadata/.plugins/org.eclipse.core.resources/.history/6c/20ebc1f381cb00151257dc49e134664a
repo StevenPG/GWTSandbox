@@ -75,12 +75,8 @@ public class MemoryGameBoardWriter {
 		// Create an entirely new board to print using the original cards
 		ArrayList<MemoryCard> cardList = board.getOriginalCardList();
 
-		// Build a perfect copy of the game board
-		ArrayList<MemoryCard> gameBoard = new ArrayList<MemoryCard>();
-		for(int i = 0; i < board.totalCards(); i++){
-			gameBoard.add(board.getCard(i).copyCard());
-		}
-		MemoryGameBoard debugBoard = new MemoryGameBoard(gameBoard, true);
+		// Overwrite the original board with the copy
+		MemoryGameBoard debugBoard = new MemoryGameBoard(cardList);
 
 		StringBuilder builder = new StringBuilder();
 		for (int i = 1; i < debugBoard.totalCards(); i++) {
