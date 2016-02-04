@@ -1,0 +1,106 @@
+package stevengantz.memory.card;
+
+/**
+ * @author: Steven Gantz
+ * @date: 2/2/2016
+ * @Created for CSC421, Dr. Spiegel
+ * @Project Due:
+ * @This file is a container that represents a card used to play the card game
+ *       memory.
+ **/
+public class MemoryCard {
+
+	//TODO
+	private CardFace frontFace;
+	private CardFace rearFace;
+	private boolean faceUp;
+	private boolean paired;
+	private MemoryCard pairedCard;
+
+	/**
+	 * General constructor that builds a memory card with two faces, a front and
+	 * rear.
+	 * 
+	 * @param frontFace
+	 *            Front face of the Memory Card
+	 * @param rearFace
+	 *            Rear face of the Memory Card
+	 */
+	public MemoryCard(CardFace frontFace, CardFace rearFace) {
+		this.frontFace = frontFace;
+		this.rearFace = rearFace;
+		this.faceUp = false;
+		this.paired = false;
+	}
+
+	/**
+	 * Accessor method for retrieving the front card face
+	 * 
+	 * @return front card face
+	 */
+	public CardFace getFrontFace() {
+		return this.frontFace;
+	}
+
+	/**
+	 * Accessor method for retrieving the rear card face
+	 * 
+	 * @return rear card face
+	 */
+	public CardFace getRearFace() {
+		return this.rearFace;
+	}
+	
+	public void lockInPair(MemoryCard paired){
+		this.paired = true;
+	}
+
+	/**
+	 * Accessor method for seeing whether the card is front face up
+	 * 
+	 * @return true or false if the card is front face up or not
+	 */
+	public boolean isFaceUp() {
+		return this.faceUp;
+	}
+
+	/**
+	 * Mutator method for changing the card's face from front to rear or vice
+	 * versa. If the card is front face up, this.faceUp is set to false (ie.
+	 * front face down).
+	 */
+	public void flip() {
+		this.faceUp = (faceUp) ? false : true;
+	}
+
+	/**
+	 * Create a real copy of the memory card (hard copy) rather than copying the
+	 * reference itself (soft copy).
+	 * 
+	 * @return new MemoryCard that is identical to the calling MemoryCard
+	 */
+	public MemoryCard copyCard() {
+		return new MemoryCard(this.frontFace, this.rearFace);
+	}
+
+	public boolean equals(MemoryCard mem) {
+		// Make sure the types are correct
+		if (!(mem instanceof MemoryCard)) {
+			return false;
+		}
+
+		// compare the two cards front faces
+		return this.getFrontFace() == mem.getFrontFace();
+	}
+
+	/**
+	 * This method overrides java.lang.Object.toString and returns the current
+	 * upward face as a string. If the front is face up, it.toString is
+	 * returned, whereas if the rear is face up, that.toString is returned.
+	 */
+	@Override
+	public String toString() {
+		return (faceUp) ? this.frontFace.toString() : this.rearFace.toString();
+	}
+
+}

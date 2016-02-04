@@ -10,9 +10,12 @@ package stevengantz.memory.card;
  **/
 public class MemoryCard {
 
+	// TODO
 	private CardFace frontFace;
 	private CardFace rearFace;
 	private boolean faceUp;
+	private boolean paired;
+	private MemoryCard pairedCard;
 
 	/**
 	 * General constructor that builds a memory card with two faces, a front and
@@ -27,6 +30,7 @@ public class MemoryCard {
 		this.frontFace = frontFace;
 		this.rearFace = rearFace;
 		this.faceUp = false;
+		this.paired = false;
 	}
 
 	/**
@@ -45,6 +49,28 @@ public class MemoryCard {
 	 */
 	public CardFace getRearFace() {
 		return this.rearFace;
+	}
+
+	/**
+	 * Lock the card into a pair with another card
+	 * 
+	 * @param paired
+	 */
+	public void lockInPair(MemoryCard paired) {
+		this.paired = true;
+		this.pairedCard = paired;
+	}
+
+	/**
+	 * Return the card this card is paired with currently
+	 * 
+	 * @return null if not paired, paired card if paired
+	 */
+	public MemoryCard getPairedCard() {
+		if (!this.paired)
+			return null;
+		// otherwise, this card is paired
+		return this.pairedCard;
 	}
 
 	/**
