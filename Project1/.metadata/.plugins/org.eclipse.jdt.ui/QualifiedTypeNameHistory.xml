@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="stevengantz.memory.MemoryCardWriter"/>
+<fullyQualifiedTypeName name="stevengantz.memory.TextCardFace"/>
+<fullyQualifiedTypeName name="stevengantz.memory.MemoryCard"/>
+<fullyQualifiedTypeName name="java.lang.NegativeArraySizeException"/>
+<fullyQualifiedTypeName name="java.util.Collections"/>
+<fullyQualifiedTypeName name="stevengantz.memory.test.MemoryGameBoardTest"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
+<fullyQualifiedTypeName name="stevengantz.memory.card.TextCardFace"/>
+<fullyQualifiedTypeName name="java.lang.RuntimeException"/>
+<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameTextDriver"/>
+<fullyQualifiedTypeName name="stevengantz.memory.cli.MemoryGameBoardWriter"/>
+<fullyQualifiedTypeName name="stevengantz.memory.spiegel.Input.InputReader"/>
+<fullyQualifiedTypeName name="stevengantz.memory.spiegel.SpiegelCode"/>
+<fullyQualifiedTypeName name="stevengantz.memory.card.MemoryCard"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameState"/>
+<fullyQualifiedTypeName name="stevengantz.memory.structure.MemoryGameBoard"/>
+</qualifiedTypeNameHistroy>
