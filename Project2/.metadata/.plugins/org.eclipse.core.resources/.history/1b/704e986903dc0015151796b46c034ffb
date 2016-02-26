@@ -1,0 +1,23 @@
+package stevengantz.client;
+
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.ui.Image;
+
+import stevengantz.memory.card.ImageCardFace;
+import stevengantz.memory.card.MemoryCard;
+
+/**
+ * Entry point classes define <code>onModuleLoad()</code>.
+ */
+public class memory implements EntryPoint {
+
+    /**
+     * This is the entry point method.
+     */
+    public void onModuleLoad() {
+
+        MemoryCard mem = new MemoryCard(new ImageCardFace("img/card-back.jpg"), new ImageCardFace(""));
+        ImageCardFace testImage = (ImageCardFace) mem.getFrontFace();
+    }
+}

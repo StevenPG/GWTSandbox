@@ -1,0 +1,29 @@
+package stevengantz.memory.data;
+
+import com.google.gwt.user.client.Window;
+
+/**
+ * @author Steven Gantz
+ * @date 2/25/2016
+ * @file This file contains all CONSTANT values used
+ * throughout the application for ease of change management.
+ */
+public class Appdata {
+    
+    /**
+     * Card pixel sizes
+     */
+    public static int CARDHEIGHT = Window.getClientHeight()/2;
+    public static int CARDWIDTH = Window.getClientWidth()/3;
+    
+    /**
+     * Total number of cards
+     */
+    public static int NUMBEROFCARDS = 30;
+    
+    /**
+     * Error image
+     */
+    public static String ERRORIMAGE = "http://i.imgur.com/74FVTpV.jpg?1";
+    
+}

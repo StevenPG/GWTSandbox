@@ -1,0 +1,65 @@
+package stevengantz.client;
+
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ErrorEvent;
+import com.google.gwt.event.dom.client.ErrorHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import stevengantz.memory.card.MemoryCard;
+import stevengantz.memory.data.Appdata;
+
+/**
+ * Entry point classes define <code>onModuleLoad()</code>.
+ */
+public class memory implements EntryPoint {
+    
+    /**
+     * The generic image that all cards will have on their backs.
+     */
+    private Image cardBack = new Image();
+    
+    /**
+     * A generic image hosted online that will appear when an issue occurs.
+     */
+    private Image errorImage = new Image();
+
+    /**
+     * This is the entry point method.
+     */
+    public void onModuleLoad() {
+
+        this.loadImages();
+        this.setImageErrorHandlers();
+        this.setImageSizes();
+        
+        HorizontalPanel horiz = new HorizontalPanel();
+        
+        horiz.add(errorImage);
+
+        RootPanel.get().add(horiz);
+    }
+    
+    private void loadImages() {
+        this.cardBack.setUrl("img/card-back.jpg");
+    }
+    
+    private void setImageErrorHandlers() {
+        this.cardBack.addErrorHandler(new ErrorHandler() {
+            public void onError(ErrorEvent event) {
+                cardBack.setUrl("http://i.imgur.com/74FVTpV.jpg?1");
+            }
+        });
+    }
+    
+    private void setImageSizes() {
+        this.cardBack.setPixelSize(Appdata.cardWidth, Appdata.cardHeight);
+        this.errorImage.setPixelSize(Appdata.cardWidth, Appdata.cardHeight);
+    }
+}

@@ -1,0 +1,36 @@
+package stevengantz.memory.card;
+
+/**
+ * @author Steven Gantz
+ * @date 2/25/2016
+ * @file This file implements CardFace and creates images for a memory card.
+ */
+public class ImageCardFace implements CardFace {
+    /**
+     * This string will contain what will represent the face of a card.
+     */
+    private String cardFace;
+
+    public ImageCardFace(String cardFace) {
+        this.cardFace = cardFace;
+    }
+
+    /**
+     * Accessor method for retrieving the card face
+     * 
+     * @return card face image
+     */
+    public String getFace() {
+        return this.cardFace;
+    }
+
+    /**
+     * This method overrides the java.lang.Object.toString method.
+     * 
+     * @return string representation of object
+     */
+    @Override
+    public String toString() {
+        return new String("");
+    }
+}

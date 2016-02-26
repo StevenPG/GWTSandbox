@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package stevengantz.memory.card;
+
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
+
+/**
+ * @author Steven Gantz
+ * @date 2/25/2016
+ * @file This file handles image loading for the Memory game.
+ */
+public Resources extends ClientBundle {
+    
+    // Image template
+    //@Source("");
+    //ImageResource fileName();
+    
+    @Source("img/card-back.jpg")
+    ImageResource cardBack();
+}
+
+/* External calling code:
+ * 
+ * Resources resources = GWT.create(Resources.class);
+ * Image img = new Image(resources.fileName());
+ * 
+ */

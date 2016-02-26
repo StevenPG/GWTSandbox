@@ -1,0 +1,10 @@
+package stevengantz.memory.card;
+
+/**
+ * @author Steven Gantz
+ * @date 2/25/2016
+ * @file This file implements CardFace and creates images for a memory card.
+ */
+public class ImageCardFace implements CardFace {
+    
+}

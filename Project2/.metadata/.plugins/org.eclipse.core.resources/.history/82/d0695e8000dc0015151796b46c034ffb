@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package stevengantz.memory.card;
+
+/**
+ * @author Steven
+ *
+ */
+public interface Resources {
+
+}
