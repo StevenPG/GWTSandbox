@@ -2,8 +2,6 @@
 - [x] Java
 - [x] C++
 - [x] Python
-- [ ] Android
-- [ ] iOS
 - [x] C#
 - [x] Scala
 - [x] Perl
@@ -24,8 +22,6 @@
 - [x] Java
 - [x] C++
 - [x] Python
-- [ ] Android
-- [ ] iOS
 - [x] C#
 - [x] Scala
 - [x] Perl
@@ -34,10 +30,10 @@
 - [x] Ruby
 - [x] Assembly Language
 - [x] Swift
-- [ ] Visual Basic
-- [ ] Ada
-- [ ] Haskell
-- [ ] Lua
-- [ ] Lisp
-- [ ] Go
-- [ ] SQL
+- [x] Visual Basic
+- [x] Ada
+- [x] Haskell
+- [x] Lua
+- [x] Lisp
+- [x] Go
+- [x] SQL
