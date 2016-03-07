@@ -27,7 +27,7 @@ public class MemoryGameDriver {
     /**
      * Contains game fields internally
      */
-    protected GameData gamedata;
+    public GameData gamedata;
 
     /**
      * Array of players initialized in the constructor
@@ -66,7 +66,7 @@ public class MemoryGameDriver {
 
             // Save i in a final variable for use inside ClickHandler
             final int index = i;
-            
+
             this.board.getCard(i).face.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -87,22 +87,61 @@ public class MemoryGameDriver {
 
         // First card has been selected
         if (gamedata.gamePhase == 0) {
-            currentCard.face.setUrl(currentCard.frontFace.getUrl());
-            gamedata.firstCard = currentCard;
-            gamedata.gamePhase = 1;
+            selectedFirstCard(currentCard, selectedCard);
             return;
         }
 
         // Second card has been selected
         if (gamedata.gamePhase == 1) {
-            if (currentCard == gamedata.firstCard) {
-                Window.alert("You've already selected that card, pick again!");
-            } else {
-                currentCard.face.setUrl(currentCard.frontFace.getUrl());
-                gamedata.secondCard = currentCard;
-                gamedata.gamePhase = 2;
-                return;
-            }
+            selectedSecondCard(currentCard, selectedCard);
+            return;
         }
+
+        // Still processing something, don't do anything
+        if (gamedata.gamePhase == 2) {
+            return;
+        }
+    }
+
+    /**
+     * Internal changes made when in phase 0
+     * 
+     * @param currentCard
+     *            The card that was clicked on
+     * @param selectedCard
+     *            The value of the card that was selected
+     */
+    protected void selectedFirstCard(MemoryCard currentCard, int selectedCard) {
+        currentCard.face.setUrl(currentCard.frontFace.getUrl());
+        gamedata.firstCard = currentCard;
+        gamedata.gamePhase = 1;
+    }
+
+    /**
+     * Internal changes made when in phase 1
+     * 
+     * @param currentCard
+     * @param selectedCard
+     */
+    protected void selectedSecondCard(MemoryCard currentCard, int selectedCard) {
+        if (currentCard == gamedata.firstCard) {
+            Window.alert("You've already selected that card, pick again!");
+        } else {
+            currentCard.face.setUrl(currentCard.frontFace.getUrl());
+            gamedata.secondCard = currentCard;
+            gamedata.gamePhase = 2;
+        }
+        
+        // Check for a match
+        checkForMatch();
+    }
+    
+    /**
+     * Check for a match and return a boolean
+     */
+    protected void checkForMatch(){
+        String card1 = gamedata.firstCard.frontFace.getUrl();
+        String card2 = gamedata.secondCard.frontFace.getUrl();
+        Window.alert(String.valueOf(card1==card2));
     }
 }

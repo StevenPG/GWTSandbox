@@ -40,7 +40,7 @@ public class Appdata {
     /**
      * Card image location for back
      */
-    public static String REARIMAGE = "img/card-back.jpg";
+    public static String REARIMAGE = "img/cardback.jpg";
 
     public static ArrayList<String> GetImageStringList() {
         ArrayList<String> imagelist = new ArrayList<String>();

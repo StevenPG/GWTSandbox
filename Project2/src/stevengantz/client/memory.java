@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -33,6 +36,16 @@ public class memory implements EntryPoint {
     MemoryGameBoard board;
 
     /**
+     * Reference for whether the cheat is enabled or not
+     */
+    boolean cheatEnabled = false;
+
+    /**
+     * Contain the driver at a high level for easier access throughout code
+     */
+    MemoryGameDriver driver;
+
+    /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
@@ -51,7 +64,7 @@ public class memory implements EntryPoint {
         MemoryLayoutPanel mainPanel = createVisualStructure(totalPlayers);
 
         // Initialize the GUI and game driver
-        MemoryGameDriver driver = new MemoryGameDriver(this.board, players);
+        driver = new MemoryGameDriver(this.board, players);
 
         // Start GUI
         RootLayoutPanel.get().add(mainPanel);
@@ -95,11 +108,39 @@ public class memory implements EntryPoint {
         TextBox testData = new TextBox();
         testData.setText("Super wide test");
 
+        Button toggleButton = new Button();
+        toggleButton.setText("Cheat");
+        toggleButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                cheatEnabled = !cheatEnabled;
+                if (cheatEnabled) {
+                    // assign phase into phase 2 to stop play
+                    driver.gamedata.gamePhase = 2;
+                    //Window.alert("Enable cheat");
+                    for (int i = 0; i < board.totalCards(); i++) {
+                        board.getCard(i).face.setUrl(board.getCard(i).frontFace.getUrl());
+                    }
+                } else {
+                    // assign phase back to phase 0 to resume play
+                    driver.gamedata.gamePhase = 0;
+                    //Window.alert("Disable cheat");
+                    for (int i = 0; i < board.totalCards(); i++) {
+                        board.getCard(i).face.setUrl(Appdata.REARIMAGE);
+                    }
+
+                    // TODO Reassign the cards that should be faced up to the
+                    // correct image
+                }
+            }
+        });
+
         // Assign data to structures
         horiz.add(testData);
 
         // Wrap structures into panel
         staticPanel.add(horiz);
+        staticPanel.add(toggleButton);
 
         return staticPanel;
     }
@@ -221,7 +262,7 @@ public class memory implements EntryPoint {
 
         // shuffle the board
         board.randomizeBoard();
-        
+
         return board;
     }
 
