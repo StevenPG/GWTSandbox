@@ -45,10 +45,10 @@ public class Appdata {
     public static ArrayList<String> GetImageStringList(){
         ArrayList<String> imagelist = new ArrayList<String>();
         
-        imagelist.add(ERRORIMAGE); //1
-        imagelist.add(ERRORIMAGE); //2
-        imagelist.add(ERRORIMAGE); //3
-        imagelist.add(ERRORIMAGE); //4
+        imagelist.add("img/cardfaces/CPlusPlus.jpg"); //1
+        imagelist.add("img/cardfaces/java.jpg"); //2
+        imagelist.add("img/cardfaces/python.png"); //3
+        imagelist.add("img/cardfaces/js.png"); //4
         imagelist.add(ERRORIMAGE); //5
         imagelist.add(ERRORIMAGE); //6
         imagelist.add(ERRORIMAGE); //7

@@ -219,6 +219,9 @@ public class memory implements EntryPoint {
         // Create the board with a list of cards
         MemoryGameBoard board = new MemoryGameBoard(cardList, true);
 
+        // shuffle the board
+        //board.randomizeBoard();
+        
         return board;
     }
 

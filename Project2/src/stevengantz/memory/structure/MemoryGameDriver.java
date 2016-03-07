@@ -67,12 +67,20 @@ public class MemoryGameDriver {
             // Save i in a final variable for use inside ClickHandler
             final int index = i;
 
+            //TODO TMP FOR CARD BUILDING
+            this.board.getCard(i).face.setUrl(
+                    this.board.getCard(i).frontFace.getUrl()
+                    );
+            
+            /**
+            
             this.board.getCard(i).face.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     cardClicked(index);
                 }
             });
+            **/
         }
     }
 
