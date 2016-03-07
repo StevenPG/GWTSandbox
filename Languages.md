@@ -21,16 +21,16 @@
 - [ ] SQL
 
 # Finalized and card works
-- [ ] Java
-- [ ] C++
-- [ ] Python
+- [x] Java
+- [x] C++
+- [x] Python
 - [ ] Android
 - [ ] iOS
 - [ ] C#
 - [ ] Scala
 - [ ] Perl
 - [ ] PHP
-- [ ] JavaScript
+- [x] JavaScript
 - [ ] Ruby
 - [ ] Assembly Language
 - [ ] Swift
