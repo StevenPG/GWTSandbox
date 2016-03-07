@@ -220,7 +220,7 @@ public class memory implements EntryPoint {
         MemoryGameBoard board = new MemoryGameBoard(cardList, true);
 
         // shuffle the board
-        //board.randomizeBoard();
+        board.randomizeBoard();
         
         return board;
     }
