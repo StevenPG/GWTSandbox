@@ -20,20 +20,24 @@ public class Appdata {
      * Card pixel sizes, playing cards are 16x9
      * Useful resource: http://andrew.hedges.name/experiments/aspect_ratio/
      */
-    public static int CARDHEIGHT = 175;
-    public static int CARDWIDTH = 98;
+    public static int CARDHEIGHT = Appdata.WINDOWHEIGHT/6;
+    public static int CARDWIDTH = Appdata.WINDOWWIDTH/20;
     
     /**
      * Total number of cards
      */
     public static int NUMROWS = 5;
     public static int NUMCOLS = 6;
-    public static int NUMBEROFCARDS = Appdata.NUMROWS * Appdata.NUMCOLS;
-    
+    public static int NUMBEROFCARDS = Appdata.NUMROWS * Appdata.NUMCOLS/2;    
     
     /**
-     * Error image
+     * Error image - TODO temporarily front image
      */
     public static String ERRORIMAGE = "http://i.imgur.com/74FVTpV.jpg?1";
+    
+    /**
+     * Card image location for back
+     */
+    public static String REARIMAGE = "img/card-back.jpg";
     
 }

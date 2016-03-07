@@ -14,12 +14,17 @@ public class MemoryCard {
 	/**
 	 * Front face of the memory card This face is the face to check for matches
 	 */
-	private Image frontFace;
+	public Image frontFace;
 
 	/**
 	 * Rear face of the memory card
 	 */
-	private Image rearFace;
+	public Image rearFace;
+	
+	/**
+	 * The face that is showing to the screen
+	 */
+	public Image face;
 
 	/**
 	 * Whether the card is front-face-up or not
@@ -50,6 +55,7 @@ public class MemoryCard {
 		this.rearFace = rearFace;
 		this.faceUp = false;
 		this.paired = false;
+		this.face = rearFace;
 	}
 
 	/**
@@ -68,6 +74,16 @@ public class MemoryCard {
 	 */
 	public Image getRearFace() {
 		return this.rearFace;
+	}
+	
+	public Image getFace() {
+	    if(this.isFaceUp()){
+	        this.face = this.frontFace;
+	        return this.face;
+	    } else {
+	        this.face = this.rearFace;
+	        return this.face;
+	    }
 	}
 
 	/**
@@ -107,7 +123,13 @@ public class MemoryCard {
 	 * front face down).
 	 */
 	public void flip() {
-		this.faceUp = (faceUp) ? false : true;
+		//this.faceUp = (faceUp) ? false : true;
+	    this.faceUp = ! this.faceUp;
+	    if(this.isFaceUp()){
+            this.face = this.rearFace;
+        } else {
+            this.face = this.frontFace;
+        }
 	}
 
 	/**
@@ -117,7 +139,8 @@ public class MemoryCard {
 	 * @return new MemoryCard that is identical to the calling MemoryCard
 	 */
 	public MemoryCard copyCard() {
-		return new MemoryCard(this.frontFace, this.rearFace);
+		return new MemoryCard(this.frontFace,
+		        this.rearFace);
 	}
 
 	public boolean equals(MemoryCard mem) {
