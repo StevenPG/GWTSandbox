@@ -1,4 +1,9 @@
 /** Add css rules here for your application. */
 
-
+/** Background attributes for rootpanel **/
+RootPanelStyle
+{
+	background-image:url('img/temporary.jpg');
+	background-color:#cccccc;
+}
 
