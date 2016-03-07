@@ -1,0 +1,20 @@
+- [ ] Java
+- [ ] C++
+- [ ] Python
+- [ ] Android
+- [ ] iOS
+- [ ] C#
+- [ ] Scala
+- [ ] Perl
+- [ ] PHP
+- [ ] JavaScript
+- [ ] Ruby
+- [ ] Assembly Language
+- [ ] Swift
+- [ ] Visual Basic
+- [ ] Ada
+- [ ] Haskell
+- [ ] Lua
+- [ ] Lisp
+- [ ] Go
+- [ ] SQL
