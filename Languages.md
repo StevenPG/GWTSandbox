@@ -10,15 +10,15 @@
 - [x] PHP
 - [x] JavaScript
 - [x] Ruby
-- [ ] Assembly Language
-- [ ] Swift
-- [ ] Visual Basic
-- [ ] Ada
-- [ ] Haskell
-- [ ] Lua
-- [ ] Lisp
-- [ ] Go
-- [ ] SQL
+- [x] Assembly Language
+- [x] Swift
+- [x] Visual Basic
+- [x] Ada
+- [x] Haskell
+- [x] Lua
+- [x] Lisp
+- [x] Go
+- [x] SQL
 
 # Finalized and card works
 - [x] Java
@@ -32,8 +32,8 @@
 - [x] PHP
 - [x] JavaScript
 - [x] Ruby
-- [ ] Assembly Language
-- [ ] Swift
+- [x] Assembly Language
+- [x] Swift
 - [ ] Visual Basic
 - [ ] Ada
 - [ ] Haskell
