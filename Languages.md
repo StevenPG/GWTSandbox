@@ -1,3 +1,26 @@
+# Primary Picture downloaded
+- [x] Java
+- [x] C++
+- [x] Python
+- [ ] Android
+- [ ] iOS
+- [x] C#
+- [x] Scala
+- [x] Perl
+- [x] PHP
+- [x] JavaScript
+- [ ] Ruby
+- [ ] Assembly Language
+- [ ] Swift
+- [ ] Visual Basic
+- [ ] Ada
+- [ ] Haskell
+- [ ] Lua
+- [ ] Lisp
+- [ ] Go
+- [ ] SQL
+
+# Finalized and card works
 - [ ] Java
 - [ ] C++
 - [ ] Python
