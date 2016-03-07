@@ -1,5 +1,7 @@
 package stevengantz.memory.data;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.Window;
 
 /**
@@ -39,5 +41,32 @@ public class Appdata {
      * Card image location for back
      */
     public static String REARIMAGE = "img/card-back.jpg";
+    
+    public static ArrayList<String> GetImageStringList(){
+        ArrayList<String> imagelist = new ArrayList<String>();
+        
+        imagelist.add(ERRORIMAGE); //1
+        imagelist.add(ERRORIMAGE); //2
+        imagelist.add(ERRORIMAGE); //3
+        imagelist.add(ERRORIMAGE); //4
+        imagelist.add(ERRORIMAGE); //5
+        imagelist.add(ERRORIMAGE); //6
+        imagelist.add(ERRORIMAGE); //7
+        imagelist.add(ERRORIMAGE); //8
+        imagelist.add(ERRORIMAGE); //9
+        imagelist.add(ERRORIMAGE); //10
+        imagelist.add(ERRORIMAGE); //11
+        imagelist.add(ERRORIMAGE); //12
+        imagelist.add(ERRORIMAGE); //13
+        imagelist.add(ERRORIMAGE); //14
+        imagelist.add(ERRORIMAGE); //15
+        imagelist.add(ERRORIMAGE); //16
+        imagelist.add(ERRORIMAGE); //17
+        imagelist.add(ERRORIMAGE); //18
+        imagelist.add(ERRORIMAGE); //19
+        imagelist.add(ERRORIMAGE); //20
+        
+        return imagelist;
+    }
     
 }

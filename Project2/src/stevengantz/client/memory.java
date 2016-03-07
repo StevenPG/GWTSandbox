@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -18,9 +15,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import stevengantz.memory.card.MemoryCard;
 import stevengantz.memory.data.Appdata;
+import stevengantz.memory.player.HumanPlayer;
 import stevengantz.memory.player.Player;
 import stevengantz.memory.structure.MemoryGameBoard;
 import stevengantz.memory.structure.MemoryGameDriver;
+import stevengantz.memory.structure.MemoryLayoutPanel;
+import stevengantz.memory.structure.VerticalGamePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -44,17 +44,20 @@ public class memory implements EntryPoint {
 
         // TODO create an initial menu
         // Inside menu, number of players and their types will be returned
-        players.add(null);
-        int totalPlayers = 2; // TODO TMP
+        players.add(new HumanPlayer("Test1"));
+        int totalPlayers = 1; // TODO TMP
 
         // Build general layout of page
-        DockLayoutPanel mainPanel = createVisualStructure(totalPlayers);
+        MemoryLayoutPanel mainPanel = createVisualStructure(totalPlayers);
 
         // Initialize the GUI and game driver
         MemoryGameDriver driver = new MemoryGameDriver(this.board, players);
 
         // Start GUI
         RootLayoutPanel.get().add(mainPanel);
+
+        // Begin game using driver's external method call
+        driver.playGame();
     }
 
     /**
@@ -62,40 +65,43 @@ public class memory implements EntryPoint {
      * 
      * @return DockPanel initialized with all elements
      */
-    protected DockLayoutPanel createVisualStructure(int numberOfPlayers) {
-        DockLayoutPanel mainPanel = new DockLayoutPanel(Unit.PX);
-
-        // Attributes of base panel
-        mainPanel.setWidth("100%");
-        mainPanel.setHeight("100%");
-        mainPanel.setStyleName("RootBackgroundStyle");
-
-        // Generate title panel
-        HorizontalPanel title = new HorizontalPanel();
-        TextBox titleBox = new TextBox();
-        titleBox.setText("Test");
-        title.add(titleBox);
+    protected MemoryLayoutPanel createVisualStructure(int numberOfPlayers) {
+        MemoryLayoutPanel mainPanel = new MemoryLayoutPanel(Unit.PX);
 
         // Generate game panel
-        VerticalPanel centerGamePanel = buildGamePanel();
+        VerticalGamePanel centerGamePanel = buildGamePanel();
 
         // Generate information panel
         TabLayoutPanel infoPanel = createInfoPanel(numberOfPlayers);
 
         // Generate general game data and static info panel
-        VerticalPanel staticPanel = new VerticalPanel();
-        HorizontalPanel a = new HorizontalPanel();
-        TextBox test = new TextBox();
-        test.setText("Super wide test");
-        a.add(test);
-        staticPanel.add(a);
+        VerticalPanel staticPanel = createStaticPanel();
 
         // Add individual pieces to DockPanel
-        mainPanel.addEast(staticPanel, Appdata.WINDOWWIDTH/5);
-        mainPanel.addWest(infoPanel, Appdata.WINDOWWIDTH/5);
-        mainPanel.addSouth(centerGamePanel, Appdata.WINDOWWIDTH/2);
+        mainPanel.addEast(staticPanel, Appdata.WINDOWWIDTH / 5);
+        mainPanel.addWest(infoPanel, Appdata.WINDOWWIDTH / 5);
+        mainPanel.addSouth(centerGamePanel, Appdata.WINDOWHEIGHT);
 
         return mainPanel;
+    }
+
+    protected VerticalPanel createStaticPanel() {
+        VerticalPanel staticPanel = new VerticalPanel();
+
+        // Create structure
+        HorizontalPanel horiz = new HorizontalPanel();
+
+        // Generate data
+        TextBox testData = new TextBox();
+        testData.setText("Super wide test");
+
+        // Assign data to structures
+        horiz.add(testData);
+
+        // Wrap structures into panel
+        staticPanel.add(horiz);
+
+        return staticPanel;
     }
 
     /**
@@ -109,25 +115,13 @@ public class memory implements EntryPoint {
         infoPanel.setAnimationDuration(500);
         infoPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 
-        // create contents for tabs of tabpanel
-        Label label1 = new Label("This is contents of TAB 1");
-        label1.setHeight("200");
-        Label label2 = new Label("This is contents of TAB 2");
-        label2.setHeight("200");
-        Label label3 = new Label("This is contents of TAB 3");
-        label3.setHeight("200");
+        for (int i = 0; i < numberOfPlayers; i++) {
+            Label label = new Label("This is a label");
+            label.setHeight("200");
+            String labelTitle = "Test " + String.valueOf(i);
+            infoPanel.add(label, labelTitle);
+        }
 
-        // create titles for tabs
-        String tab1Title = "TAB 1";
-        String tab2Title = "TAB 2";
-        String tab3Title = "TAB 3";
-
-        // create tabs
-        infoPanel.add(label1, tab1Title);
-        infoPanel.add(label2, tab2Title);
-        infoPanel.add(label3, tab3Title);
-
-        
         infoPanel.selectTab(0);
         infoPanel.ensureDebugId("infoPanel");
         infoPanel.setVisible(true);
@@ -150,17 +144,10 @@ public class memory implements EntryPoint {
      * 
      * @return VerticalPanel filled with horizontal panels of images
      */
-    protected VerticalPanel buildGamePanel() {
+    protected VerticalGamePanel buildGamePanel() {
 
         // Generate overall vertical panel
-        VerticalPanel vert = new VerticalPanel();
-
-        // Assign attributes to the vertical panel
-        vert.setWidth("100%");
-        vert.setHeight("100%");
-        vert.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        vert.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        vert.setStyleName("RootBackgroundLayout");
+        VerticalGamePanel game = new VerticalGamePanel();
 
         // Keep track of each card being entered
         int currentCardIndex = 0;
@@ -171,13 +158,14 @@ public class memory implements EntryPoint {
             for (int j = 0; j < Appdata.NUMCOLS; j++) {
 
                 // Add image and iterate card
+                this.board.getCard(currentCardIndex).face.setStyleName("Padding");
                 horiz.add(this.board.getCard(currentCardIndex).face);
                 currentCardIndex++;
             }
 
-            vert.add(horiz);
+            game.add(horiz);
         }
-        return vert;
+        return game;
     }
 
     /**
@@ -191,6 +179,9 @@ public class memory implements EntryPoint {
         // List of filled out Memory Cards
         ArrayList<MemoryCard> cardList = new ArrayList<MemoryCard>();
 
+        // List of possible images
+        ArrayList<String> frontImageList = Appdata.GetImageStringList();
+
         // Loop through for each card
         for (int index = 0; index < Appdata.NUMBEROFCARDS; index++) {
 
@@ -203,10 +194,10 @@ public class memory implements EntryPoint {
             Image backPair = new Image();
 
             // Assign the image
-            front.setUrl(Appdata.ERRORIMAGE);
+            front.setUrl(frontImageList.get(index));
             back.setUrl(Appdata.REARIMAGE);
 
-            frontPair.setUrl(Appdata.ERRORIMAGE);
+            frontPair.setUrl(frontImageList.get(index));
             backPair.setUrl(Appdata.REARIMAGE);
 
             // Assign relative sizes

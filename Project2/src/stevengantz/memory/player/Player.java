@@ -9,11 +9,6 @@ package stevengantz.memory.player;
 public interface Player {
     
     /**
-     * Play through a turn in the game
-     */
-    public void playTurn();
-    
-    /**
      * Retrieve the player's name for printing/viewing
      * @return
      */
