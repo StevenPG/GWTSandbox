@@ -26,10 +26,10 @@
 - [x] Python
 - [ ] Android
 - [ ] iOS
-- [ ] C#
-- [ ] Scala
-- [ ] Perl
-- [ ] PHP
+- [x] C#
+- [x] Scala
+- [x] Perl
+- [x] PHP
 - [x] JavaScript
 - [ ] Ruby
 - [ ] Assembly Language
