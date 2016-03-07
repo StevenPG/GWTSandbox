@@ -4,15 +4,16 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import stevengantz.memory.card.MemoryCard;
@@ -44,19 +45,16 @@ public class memory implements EntryPoint {
         // TODO create an initial menu
         // Inside menu, number of players and their types will be returned
         players.add(null);
-        int totalPlayers = 2; //TODO TMP
-
-        // Assign background image to RootPanel
-        RootPanel.get().setStyleName("RootPanelStyle");
+        int totalPlayers = 2; // TODO TMP
 
         // Build general layout of page
-        DockPanel mainPanel = createVisualStructure(totalPlayers);
+        DockLayoutPanel mainPanel = createVisualStructure(totalPlayers);
 
         // Initialize the GUI and game driver
         MemoryGameDriver driver = new MemoryGameDriver(this.board, players);
 
         // Start GUI
-        RootPanel.get().add(mainPanel);
+        RootLayoutPanel.get().add(mainPanel);
     }
 
     /**
@@ -64,8 +62,19 @@ public class memory implements EntryPoint {
      * 
      * @return DockPanel initialized with all elements
      */
-    protected DockPanel createVisualStructure(int numberOfPlayers) {
-        DockPanel mainPanel = new DockPanel();
+    protected DockLayoutPanel createVisualStructure(int numberOfPlayers) {
+        DockLayoutPanel mainPanel = new DockLayoutPanel(Unit.PX);
+
+        // Attributes of base panel
+        mainPanel.setWidth("100%");
+        mainPanel.setHeight("100%");
+        mainPanel.setStyleName("RootBackgroundStyle");
+
+        // Generate title panel
+        HorizontalPanel title = new HorizontalPanel();
+        TextBox titleBox = new TextBox();
+        titleBox.setText("Test");
+        title.add(titleBox);
 
         // Generate game panel
         VerticalPanel centerGamePanel = buildGamePanel();
@@ -73,9 +82,18 @@ public class memory implements EntryPoint {
         // Generate information panel
         TabLayoutPanel infoPanel = createInfoPanel(numberOfPlayers);
 
+        // Generate general game data and static info panel
+        VerticalPanel staticPanel = new VerticalPanel();
+        HorizontalPanel a = new HorizontalPanel();
+        TextBox test = new TextBox();
+        test.setText("Super wide test");
+        a.add(test);
+        staticPanel.add(a);
+
         // Add individual pieces to DockPanel
-        mainPanel.add(infoPanel, DockPanel.WEST);
-        mainPanel.add(centerGamePanel, DockPanel.CENTER);
+        mainPanel.addEast(staticPanel, Appdata.WINDOWWIDTH/5);
+        mainPanel.addWest(infoPanel, Appdata.WINDOWWIDTH/5);
+        mainPanel.addSouth(centerGamePanel, Appdata.WINDOWWIDTH/2);
 
         return mainPanel;
     }
@@ -87,21 +105,33 @@ public class memory implements EntryPoint {
      * @return infoPanel initialized with the correct number of players
      */
     protected TabLayoutPanel createInfoPanel(int numberOfPlayers) {
-        TabLayoutPanel infoPanel = new TabLayoutPanel(Appdata.WINDOWWIDTH/3, Unit.PX);
-        infoPanel.setAnimationDuration(1000);
-        
-        // Add the correct number of panels
-        String[] tabTitles = new String[numberOfPlayers];
-        
-        for(int i = 0; i < numberOfPlayers; i++){
-            HTML text = new HTML("Test");
-            //infoPanel.add(text, String.valueOf(i));
-            infoPanel.add(text, text);
-        }
+        TabLayoutPanel infoPanel = new TabLayoutPanel(2.5, Unit.EM);
+        infoPanel.setAnimationDuration(500);
+        infoPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
 
+        // create contents for tabs of tabpanel
+        Label label1 = new Label("This is contents of TAB 1");
+        label1.setHeight("200");
+        Label label2 = new Label("This is contents of TAB 2");
+        label2.setHeight("200");
+        Label label3 = new Label("This is contents of TAB 3");
+        label3.setHeight("200");
+
+        // create titles for tabs
+        String tab1Title = "TAB 1";
+        String tab2Title = "TAB 2";
+        String tab3Title = "TAB 3";
+
+        // create tabs
+        infoPanel.add(label1, tab1Title);
+        infoPanel.add(label2, tab2Title);
+        infoPanel.add(label3, tab3Title);
+
+        
         infoPanel.selectTab(0);
         infoPanel.ensureDebugId("infoPanel");
-        
+        infoPanel.setVisible(true);
+
         return infoPanel;
     }
 
@@ -118,7 +148,7 @@ public class memory implements EntryPoint {
      * Generate the vertical panel that holds all of the cards. This board will
      * be interacted with throughout the game.
      * 
-     * @return
+     * @return VerticalPanel filled with horizontal panels of images
      */
     protected VerticalPanel buildGamePanel() {
 
@@ -126,10 +156,11 @@ public class memory implements EntryPoint {
         VerticalPanel vert = new VerticalPanel();
 
         // Assign attributes to the vertical panel
-        vert.setWidth("50%");
-        vert.setHeight("50%");
+        vert.setWidth("100%");
+        vert.setHeight("100%");
         vert.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         vert.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        vert.setStyleName("RootBackgroundLayout");
 
         // Keep track of each card being entered
         int currentCardIndex = 0;
@@ -137,7 +168,6 @@ public class memory implements EntryPoint {
         // Add NUMROWS horizontal panels
         for (int i = 0; i < Appdata.NUMROWS; i++) {
             HorizontalPanel horiz = new HorizontalPanel();
-
             for (int j = 0; j < Appdata.NUMCOLS; j++) {
 
                 // Add image and iterate card

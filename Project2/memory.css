@@ -1,9 +1,14 @@
 /** Add css rules here for your application. */
-
-/** Background attributes for rootpanel **/
-RootPanelStyle
-{
-	background-image:url('img/temporary.jpg');
-	background-color:#cccccc;
+.RootBackgroundLayout {
+	background-image: url("img/temporary.jpg");
 }
 
+.DockPanel td {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+}
+
+.debugBorders {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+}
