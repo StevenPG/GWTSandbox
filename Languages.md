@@ -9,7 +9,7 @@
 - [x] Perl
 - [x] PHP
 - [x] JavaScript
-- [ ] Ruby
+- [x] Ruby
 - [ ] Assembly Language
 - [ ] Swift
 - [ ] Visual Basic
@@ -31,7 +31,7 @@
 - [x] Perl
 - [x] PHP
 - [x] JavaScript
-- [ ] Ruby
+- [x] Ruby
 - [ ] Assembly Language
 - [ ] Swift
 - [ ] Visual Basic
