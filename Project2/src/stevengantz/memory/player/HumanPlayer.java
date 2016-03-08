@@ -17,5 +17,6 @@ public class HumanPlayer extends MemoryPlayer implements Player {
      */
     public HumanPlayer(String name){
         this.playerName = name;
+        this.state = new PlayerState();
     }
 }

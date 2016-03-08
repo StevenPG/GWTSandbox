@@ -40,6 +40,20 @@ public abstract class MemoryPlayer implements Player {
         return state.getTotalAttempts();
 
     }
+    
+    /**
+     * Add an attempt for this player
+     */
+    public void addAttempt() {
+        state.addAttempt();
+    }
+    
+    /**
+     * Add a match for this player
+     */
+    public void addMatch() {
+        state.addMatch();
+    }
 
     /**
      * Get the player's total number of matched pairs

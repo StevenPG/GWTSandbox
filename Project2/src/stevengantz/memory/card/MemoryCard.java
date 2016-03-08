@@ -34,7 +34,7 @@ public class MemoryCard {
     /**
      * Whether the card has been paired with another card.
      */
-    private boolean paired;
+    public boolean paired;
 
     /**
      * Direct reference to the paired card, null if not paired.

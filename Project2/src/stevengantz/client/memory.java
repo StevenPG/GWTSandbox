@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import stevengantz.memory.card.MemoryCard;
@@ -46,25 +45,37 @@ public class memory implements EntryPoint {
     MemoryGameDriver driver;
 
     /**
+     * List of all players
+     */
+    ArrayList<Player> players;
+    
+    /**
+     * Give access to the tablayoutpanel
+     * for gui changes
+     */
+    public TabLayoutPanel infoPanel;
+
+    /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
         // Initialize data members for game
-        ArrayList<Player> players = new ArrayList<Player>();
+        players = new ArrayList<Player>();
         this.board = buildBoard();
 
         // TODO Create a panel that centers everything
 
         // TODO create an initial menu
         // Inside menu, number of players and their types will be returned
-        players.add(new HumanPlayer("Test1"));
-        int totalPlayers = 1; // TODO TMP
+        players.add(new HumanPlayer("Steve"));
+        players.add(new HumanPlayer("Zach"));
+        int totalPlayers = players.size();
 
         // Build general layout of page
         MemoryLayoutPanel mainPanel = createVisualStructure(totalPlayers);
 
         // Initialize the GUI and game driver
-        driver = new MemoryGameDriver(this.board, players);
+        driver = new MemoryGameDriver(this.board, players, this.infoPanel);
 
         // Start GUI
         RootLayoutPanel.get().add(mainPanel);
@@ -85,7 +96,7 @@ public class memory implements EntryPoint {
         VerticalGamePanel centerGamePanel = buildGamePanel();
 
         // Generate information panel
-        TabLayoutPanel infoPanel = createInfoPanel(numberOfPlayers);
+        this.infoPanel = createInfoPanel(numberOfPlayers);
 
         // Generate general game data and static info panel
         VerticalPanel staticPanel = createStaticPanel();
@@ -105,42 +116,71 @@ public class memory implements EntryPoint {
         HorizontalPanel horiz = new HorizontalPanel();
 
         // Generate data
-        TextBox testData = new TextBox();
-        testData.setText("Super wide test");
+        Label titleLabel = new Label();
+        titleLabel.setText("Information Panel");
 
-        Button toggleButton = new Button();
-        toggleButton.setText("Cheat");
+        // Display the rules in individual labels
+        ArrayList<Label> rules = new ArrayList<Label>();
+        rules.add(new Label());
+        rules.add(new Label());
+        rules.add(new Label());
+        rules.add(new Label());
+        rules.add(new Label());
+        rules.add(new Label());
+
+        // Fill in each value for rules
+        rules.get(0).setText("How to play");
+        rules.get(1).setText("1. Select a card and commit it to memory as best you can.");
+        rules.get(2).setText("2. Select another card, try to match them up!");
+        rules.get(3).setText("3. If you don't make a match, it is the next player's turn.");
+        rules.get(4).setText("4. Otherwise you found a match! Go again!");
+        rules.get(5).setText("5. Whoever has the most matches at the end wins!");
+
+        final Button toggleButton = new Button();
+        toggleButton.setText("Cheat: Disabled");
+        toggleButton.setWidth("100%");
+
         toggleButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 cheatEnabled = !cheatEnabled;
                 if (cheatEnabled) {
+                    toggleButton.setText("Cheat: Enabled");
                     // assign phase into phase 2 to stop play
                     driver.gamedata.gamePhase = 2;
-                    //Window.alert("Enable cheat");
+                    // Window.alert("Enable cheat");
                     for (int i = 0; i < board.totalCards(); i++) {
                         board.getCard(i).face.setUrl(board.getCard(i).frontFace.getUrl());
                     }
                 } else {
+                    toggleButton.setText("Cheat: Disabled");
                     // assign phase back to phase 0 to resume play
                     driver.gamedata.gamePhase = 0;
-                    //Window.alert("Disable cheat");
+                    // Window.alert("Disable cheat");
                     for (int i = 0; i < board.totalCards(); i++) {
-                        board.getCard(i).face.setUrl(Appdata.REARIMAGE);
+                        // Only flip them back over if they are not a part of a
+                        // pair
+                        if (!board.getCard(i).paired) {
+                            board.getCard(i).face.setUrl(Appdata.REARIMAGE);
+                        } else {
+                            // Don't do anything and leave the card face up
+                        }
                     }
-
-                    // TODO Reassign the cards that should be faced up to the
-                    // correct image
                 }
             }
         });
 
         // Assign data to structures
-        horiz.add(testData);
+        horiz.add(toggleButton);
 
         // Wrap structures into panel
+        staticPanel.add(titleLabel);
         staticPanel.add(horiz);
-        staticPanel.add(toggleButton);
+
+        // Add rules
+        for (Label lbl : rules) {
+            staticPanel.add(lbl);
+        }
 
         return staticPanel;
     }
@@ -155,15 +195,31 @@ public class memory implements EntryPoint {
         TabLayoutPanel infoPanel = new TabLayoutPanel(2.5, Unit.EM);
         infoPanel.setAnimationDuration(500);
         infoPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
-
+        
         for (int i = 0; i < numberOfPlayers; i++) {
-            Label label = new Label("This is a label");
-            label.setHeight("200");
-            String labelTitle = "Test " + String.valueOf(i);
-            infoPanel.add(label, labelTitle);
+            Label totalAttempts = new Label();
+            Label totalMatches = new Label();
+            totalAttempts.setHeight("200");
+            totalMatches.setHeight("200");
+            totalAttempts.setText("Total Attempts: 0");
+            totalMatches.setText("Total Matches: 0");
+            
+            VerticalPanel panel = new VerticalPanel();
+            
+            // Order of vertical panel
+            panel.add(totalAttempts);
+            panel.add(totalMatches);
+            
+            String tabTitle = players.get(i).getPlayerName();
+            infoPanel.add(panel, tabTitle);
         }
 
         infoPanel.selectTab(0);
+        
+        // Assign as first player
+        Label tabTitle = (Label) infoPanel.getTabWidget(0);
+        tabTitle.setText(players.get(0).getPlayerName() + "*");
+        
         infoPanel.ensureDebugId("infoPanel");
         infoPanel.setVisible(true);
 

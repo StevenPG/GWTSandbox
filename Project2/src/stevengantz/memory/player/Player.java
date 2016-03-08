@@ -25,4 +25,14 @@ public interface Player {
      * @return Total matches for a player
      */
     public int getTotalMatches();
+
+    /**
+     * Add attempt for player
+     */
+    public void addAttempt();
+    
+    /**
+     * Add a match for this player
+     */
+    public void addMatch();
 }

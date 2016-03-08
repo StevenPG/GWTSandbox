@@ -36,6 +36,9 @@ public class Appdata {
      * Error image - TODO temporarily front image
      */
     public static String ERRORIMAGE = "http://i.imgur.com/74FVTpV.jpg?1";
+    
+    public static String CHEATSON = "img/cheatsEnabled.png";
+    public static String CHEATSOFF = "img/cheatsDisabled.png";
 
     /**
      * Card image location for back
