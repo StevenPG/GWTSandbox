@@ -1,5 +1,6 @@
 package stevengantz.memory.structure;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -99,8 +100,21 @@ public class MemoryGameDriver {
         VerticalPanel panel = (VerticalPanel) infoPanel.getWidget(currentPlayerNumber);
         Label totalAttempts = (Label) panel.getWidget(0);
         Label totalMatches = (Label) panel.getWidget(1);
-        totalAttempts.setText("Total Attempts: " + String.valueOf(currentPlayer.getTotalAttempts()));
-        totalMatches.setText("Total Matches: " + String.valueOf(currentPlayer.getTotalMatches()));
+        Label successRate = (Label) panel.getWidget(2);
+        
+        float attempts = currentPlayer.getTotalAttempts();
+        float matches = currentPlayer.getTotalMatches();
+        
+        totalAttempts.setText("Total Attempts: " + String.valueOf(attempts));
+        totalMatches.setText("Total Matches: " + String.valueOf(matches));
+        
+        if(attempts != 0 && matches != 0){
+            float rate = matches / attempts;
+            BigDecimal bd = new BigDecimal(Float.toString(rate));
+            bd = bd.setScale(3, BigDecimal.ROUND_HALF_UP);
+            successRate.setText("Successful Match Rate: " + String.valueOf(bd));
+        }
+        
     }
 
     /**

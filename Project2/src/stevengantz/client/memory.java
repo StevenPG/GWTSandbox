@@ -199,16 +199,22 @@ public class memory implements EntryPoint {
         for (int i = 0; i < numberOfPlayers; i++) {
             Label totalAttempts = new Label();
             Label totalMatches = new Label();
+            Label guessingSuccess = new Label();
+            
             totalAttempts.setHeight("200");
             totalMatches.setHeight("200");
+            guessingSuccess.setHeight("200");
+            
             totalAttempts.setText("Total Attempts: 0");
             totalMatches.setText("Total Matches: 0");
+            guessingSuccess.setText("Successful Match Rate: 0");
             
             VerticalPanel panel = new VerticalPanel();
             
             // Order of vertical panel
             panel.add(totalAttempts);
             panel.add(totalMatches);
+            panel.add(guessingSuccess);
             
             String tabTitle = players.get(i).getPlayerName();
             infoPanel.add(panel, tabTitle);
