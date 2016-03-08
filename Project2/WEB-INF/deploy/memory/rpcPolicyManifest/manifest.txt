@@ -1,0 +1,2 @@
+# Module memory
+# RPC service class, partial path of RPC policy file
