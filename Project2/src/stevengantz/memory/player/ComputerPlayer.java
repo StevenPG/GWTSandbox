@@ -3,8 +3,6 @@ package stevengantz.memory.player;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.google.gwt.user.client.Window;
-
 import stevengantz.memory.card.MemoryCard;
 import stevengantz.memory.structure.MemoryGameBoard;
 
@@ -175,7 +173,6 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
                     valid = false;
                 }
             }
-            Window.alert(String.valueOf(firstNumberRetrieved) + String.valueOf(secondNumber));
             return board.getCard(secondNumber);
         } else {
             // TODO

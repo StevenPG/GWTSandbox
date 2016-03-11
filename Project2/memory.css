@@ -1,0 +1,23 @@
+/** Add css rules here for your application. */
+.RootBackgroundLayout {
+	background-image: url("img/maxresdefault.jpg");
+}
+
+.RootLayoutPanelBackground {
+	background-image: url("img/maxresdefault.jpg");
+}
+
+.DockPanel td {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+}
+
+.debugBorders {
+	border: 1px solid #BBBBBB;
+	padding: 3px;
+}
+
+.Padding {
+	padding-left: 20px;
+	padding-right: 20px;
+}
