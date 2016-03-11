@@ -21,15 +21,20 @@ You may use cheats if you'd like, they are located in the top right corner.
 
 Information on each player is available on the left sidebar.
 
+Note:
+  For some reason, GWT will not always run the Window.Location.reload()
+  command when the game ends. I have not been able to figure out why this
+  bug occurs, but the game normally reloads successfully when OK is pressed.
+
 IMPLEMENTATION_DETAILS:
-- The game is controlled through game state phases. 
+- The game is controlled through game state phases.
   - Phase 0: User uses mouse to click on the first card
   - Phase 1: User uses mouse to click on the second card
   - Phase 2: Do not allow user to select cards while processing
   - Phase 3: AI is making decisions, do not allow user to select cards
 
 - All of the visual generation is done within the client class
-  provided by GWT on project creation. 
+  provided by GWT on project creation.
 
 - Player control is done using a polymorphic class called MemoryPlayer. This
   is extended by two classes, HumanPlayer and ComputerPlayer. These classes
