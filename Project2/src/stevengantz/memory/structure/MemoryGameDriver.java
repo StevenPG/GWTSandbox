@@ -250,8 +250,6 @@ public class MemoryGameDriver {
             firstCard.paired = true;
             secondCard.paired = true;
 
-            Window.alert("AI found a pair: \n" + card1 + "\n" + card2);
-
             // Reshow the cards to fix bug?
             firstCard.face.setUrl(firstCard.frontFace.getUrl());
             secondCard.face.setUrl(secondCard.frontFace.getUrl());
@@ -293,6 +291,8 @@ public class MemoryGameDriver {
 
             // Schedule timer to run
             wait.schedule(1500);
+            
+            
 
             return;
 
