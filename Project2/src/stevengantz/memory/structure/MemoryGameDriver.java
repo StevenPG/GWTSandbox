@@ -162,8 +162,6 @@ public class MemoryGameDriver {
      */
     public void playGame() {
         assignClickHandlers();
-
-        // TODO if cpu is only player, watch them play
     }
 
     /**

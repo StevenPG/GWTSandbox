@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -76,6 +77,12 @@ public class memory implements EntryPoint {
     public TabLayoutPanel infoPanel;
 
     /**
+     * For passing audio track
+     */
+    private Audio audioTrack;
+    private boolean audioPlaying = true;
+
+    /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
@@ -84,6 +91,13 @@ public class memory implements EntryPoint {
         this.board = buildBoard();
         names = new ArrayList<String>();
         isHuman = new ArrayList<Boolean>();
+
+        // Start the music
+        this.audioTrack = Audio.createIfSupported();
+        this.audioTrack.setLoop(true);
+        this.audioTrack.setSrc("Futures.mp3");
+        this.audioTrack.setVolume(0.05);
+        this.audioTrack.play();
 
         // Create a panel that centers everything in main menu
         VerticalPanel mainmenu = buildMainMenuVisual();
@@ -109,7 +123,7 @@ public class memory implements EntryPoint {
         driver = new MemoryGameDriver(this.board, players, this.infoPanel);
 
         // Assign background image to rootlayoutpanel
-        
+
         // Start GUI
         RootLayoutPanel.get().add(mainPanel);
 
@@ -124,8 +138,8 @@ public class memory implements EntryPoint {
      */
     protected VerticalPanel buildMainMenuVisual() {
         VerticalPanel mainMenu = new VerticalPanel();
-        mainMenu.setHeight(Window.getClientHeight()+"px");
-        mainMenu.setWidth(Window.getClientWidth()+"px");
+        mainMenu.setHeight(Window.getClientHeight() + "px");
+        mainMenu.setWidth(Window.getClientWidth() + "px");
         mainMenu.setStyleName("RootLayoutPanelBackground");
         mainMenu.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -142,7 +156,7 @@ public class memory implements EntryPoint {
         Question.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
         Question.getElement().getStyle().setColor("white");
         Question.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
-        
+
         HorizontalPanel radioButtonPanel = new HorizontalPanel();
         radioButtonPanel.setSpacing(25);
         final RadioButton onePlayer = new RadioButton("choice", "1");
@@ -158,16 +172,16 @@ public class memory implements EntryPoint {
         threePlayer.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
         fourPlayer.getElement().getStyle().setColor("white");
         fourPlayer.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
-        
+
         radioButtonPanel.add(onePlayer);
         radioButtonPanel.add(twoPlayer);
         radioButtonPanel.add(threePlayer);
         radioButtonPanel.add(fourPlayer);
-        
+
         Button next = new Button();
         next.setText("Next");
-        next.setHeight(String.valueOf(Appdata.WINDOWHEIGHT/15) + "px");
-        next.setWidth(String.valueOf(Appdata.WINDOWWIDTH/6) + "px");
+        next.setHeight(String.valueOf(Appdata.WINDOWHEIGHT / 15) + "px");
+        next.setWidth(String.valueOf(Appdata.WINDOWWIDTH / 6) + "px");
         next.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -187,6 +201,24 @@ public class memory implements EntryPoint {
             }
         });
 
+        HorizontalPanel audio = new HorizontalPanel();
+        final Button toggleMusic = new Button("Disable Music");
+        toggleMusic.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (audioPlaying) {
+                    audioTrack.pause();
+                    audioPlaying = false;
+                    toggleMusic.setText("Enable Music");
+                } else {
+                    audioTrack.play();
+                    audioPlaying = true;
+                    toggleMusic.setText("Disable Music");
+                }
+            }
+        });
+        audio.add(toggleMusic);
+
         // Add static data
         HorizontalPanel horiz = new HorizontalPanel();
         horiz.setHeight("100%");
@@ -195,13 +227,14 @@ public class memory implements EntryPoint {
         author.setText("Created by: Steven Gantz");
         author.getElement().getStyle().setColor("white");
         author.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
-        author.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT/35, Unit.PX);
+        author.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 35, Unit.PX);
         horiz.add(author);
 
         mainMenu.add(title);
         mainMenu.add(Question);
         mainMenu.add(radioButtonPanel);
         mainMenu.add(next);
+        mainMenu.add(audio);
         mainMenu.add(horiz);
 
         return mainMenu;
@@ -233,7 +266,7 @@ public class memory implements EntryPoint {
             Label playerLabel = new Label();
             playerLabel.setText("Player " + String.valueOf(i + 1) + " ");
             playerLabel.getElement().getStyle().setColor("white");
-            
+
             TextBox playerName = new TextBox();
             playerNames.add(playerName);
             RadioButton human = new RadioButton("choice" + String.valueOf(i), "Human");
@@ -242,9 +275,9 @@ public class memory implements EntryPoint {
             human.setValue(true);
             human.getElement().getStyle().setColor("white");
             computer.getElement().getStyle().setColor("white");
-            
+
             // First player can't be an AI
-            if(i == 0){
+            if (i == 0) {
                 computer.setEnabled(false);
             }
 
@@ -261,8 +294,8 @@ public class memory implements EntryPoint {
         // Build button to initialize game details
         Button startGame = new Button();
         startGame.setText("Begin Game");
-        startGame.setHeight(String.valueOf(Appdata.WINDOWHEIGHT/15) + "px");
-        startGame.setWidth(String.valueOf(Appdata.WINDOWWIDTH/6) + "px");
+        startGame.setHeight(String.valueOf(Appdata.WINDOWHEIGHT / 15) + "px");
+        startGame.setWidth(String.valueOf(Appdata.WINDOWWIDTH / 6) + "px");
         startGame.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -279,19 +312,19 @@ public class memory implements EntryPoint {
 
                 // enable or disable cheats
                 RadioButton yesCheat = cheatButtons.get(0);
-                if(yesCheat.getValue()){
+                if (yesCheat.getValue()) {
                     cheatsShown = true;
                 } else {
                     cheatsShown = false;
                 }
-                
+
                 // Start the game with the newly-gotten data
                 closeMainMenuStartGame();
             }
         });
-        
+
         main.add(startGame);
-        
+
         // Create cheat options
         HorizontalPanel cheatPanel = new HorizontalPanel();
         RadioButton yesCheat = new RadioButton("cheats", "Enable cheats");
@@ -385,7 +418,7 @@ public class memory implements EntryPoint {
 
         hr.setText("------------------------------------------------------------");
         author.setText("Steven Gantz");
-        DateTimeFormat dtf = DateTimeFormat.getFormat("EEE, MMM d, yyyy"); 
+        DateTimeFormat dtf = DateTimeFormat.getFormat("EEE, MMM d, yyyy");
         date.setText(dtf.format(new Date()));
         fsDesc.setText("Press F11 to play in fullscreen");
 
@@ -397,8 +430,8 @@ public class memory implements EntryPoint {
         final Button toggleButton = new Button();
         toggleButton.setText("Cheat: Disabled");
         toggleButton.setWidth("100%");
-        
-        if(cheatsShown){
+
+        if (cheatsShown) {
             toggleButton.setVisible(true);
             toggleButton.setEnabled(true);
         } else {
@@ -409,10 +442,10 @@ public class memory implements EntryPoint {
         toggleButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if(driver.clickable == false){
+                if (driver.clickable == false) {
                     return;
                 }
-                
+
                 // else
                 cheatEnabled = !cheatEnabled;
                 if (cheatEnabled) {
@@ -455,6 +488,75 @@ public class memory implements EntryPoint {
 
         staticPanel.add(staticInfo);
 
+        // Add audio controls
+        HorizontalPanel audioControls = new HorizontalPanel();
+        final Button toggle = new Button("");
+        if (audioPlaying) {
+            toggle.setText("Music: On");
+        } else {
+            toggle.setText("Music: Off");
+        }
+        toggle.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (audioPlaying) {
+                    audioTrack.pause();
+                    audioPlaying = false;
+                    toggle.setText("Music: Off");
+                } else {
+                    audioTrack.play();
+                    audioPlaying = true;
+                    toggle.setText("Music: On");
+                }
+            }
+        });
+        Label Volume = new Label("Volume:");
+        Button volume0 = new Button("5%");
+        volume0.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                audioTrack.setVolume(0.05);
+            }
+        });
+        Button volume1 = new Button("25%");
+        volume1.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                audioTrack.setVolume(0.25);
+            }
+        });
+        Button volume2 = new Button("50%");
+        volume2.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                audioTrack.setVolume(0.50);
+            }
+        });
+        Button volume3 = new Button("75%");
+        volume3.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                audioTrack.setVolume(0.75);
+            }
+        });
+        Button volume4 = new Button("100%");
+        volume4.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                audioTrack.setVolume(1);
+            }
+        });
+
+        audioControls.add(Volume);
+        audioControls.add(volume0);
+        audioControls.add(volume1);
+        audioControls.add(volume2);
+        audioControls.add(volume3);
+        audioControls.add(volume4);
+        audioControls.add(toggle);
+
+        staticPanel.add(audioControls);
+
         return staticPanel;
     }
 
@@ -481,7 +583,7 @@ public class memory implements EntryPoint {
             totalAttempts.setText("Total Attempts: 0");
             totalMatches.setText("Total Matches: 0");
             guessingSuccess.setText("Successful Match Rate: 0");
-            
+
             totalAttempts.getElement().getStyle().setFontSize(3, Unit.EM);
             totalMatches.getElement().getStyle().setFontSize(3, Unit.EM);
             guessingSuccess.getElement().getStyle().setFontSize(3, Unit.EM);
