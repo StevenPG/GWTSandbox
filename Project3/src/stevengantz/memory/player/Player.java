@@ -25,6 +25,12 @@ public interface Player {
      * @return Total matches for a player
      */
     public int getTotalMatches();
+    
+    /**
+     * Get total player points
+     * @return total points
+     */
+    public int getTotalPoints();
 
     /**
      * Add attempt for player
@@ -35,4 +41,10 @@ public interface Player {
      * Add a match for this player
      */
     public void addMatch();
+    
+    /**
+     * Add some number of points to player
+     * @param points number of points
+     */
+    public void addPoints(int points);
 }

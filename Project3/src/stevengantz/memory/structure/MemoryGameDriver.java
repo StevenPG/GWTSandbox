@@ -156,12 +156,15 @@ public class MemoryGameDriver {
         Label totalAttempts = (Label) panel.getWidget(0);
         Label totalMatches = (Label) panel.getWidget(1);
         Label successRate = (Label) panel.getWidget(2);
+        Label totalPoints = (Label) panel.getWidget(3);
 
         float attempts = currentPlayer.getTotalAttempts();
         float matches = currentPlayer.getTotalMatches();
+        float points = currentPlayer.getTotalPoints();
 
         totalAttempts.setText("Total Attempts: " + String.valueOf(attempts));
         totalMatches.setText("Total Matches: " + String.valueOf(matches));
+        totalPoints.setText("Total points: " + String.valueOf(points));
 
         if (attempts != 0 && matches != 0) {
             float rate = matches / attempts;
@@ -379,6 +382,7 @@ public class MemoryGameDriver {
             currentPlayer.addMatch();
 
             this.matchNoise.play();
+            currentPlayer.addPoints(Appdata.POINTSPERMATCH);
             
             // Update the info panel
             updateInfoPanel();

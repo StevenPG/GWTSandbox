@@ -209,5 +209,4 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
     public void setInternalPhase(int internalPhase) {
         this.internalPhase = internalPhase;
     }
-
 }

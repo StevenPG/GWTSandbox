@@ -38,7 +38,6 @@ public abstract class MemoryPlayer implements Player {
      */
     public int getTotalAttempts() {
         return state.getTotalAttempts();
-
     }
     
     /**
@@ -63,6 +62,18 @@ public abstract class MemoryPlayer implements Player {
     public int getTotalMatches() {
         return state.getTotalMatches();
 
+    }
+    
+    /**
+     * Get total points
+     */
+    public int getTotalPoints(){
+        return this.state.getTotalPoints();        
+    }
+    
+    public void addPoints(int points){
+        int currentScore = this.state.getTotalPoints();
+        this.state.setTotalPoints(currentScore + points);
     }
 
     /**

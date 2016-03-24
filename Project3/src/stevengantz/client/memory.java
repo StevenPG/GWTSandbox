@@ -399,17 +399,17 @@ public class memory implements EntryPoint {
 
         // Fill in each value for rules
         rules.get(0).setText("How to play");
-        rules.get(0).getElement().getStyle().setFontSize(2, Unit.EM);
+        rules.get(0).getElement().getStyle().setFontSize(1.5, Unit.EM);
         rules.get(1).setText("1. Select a card and commit it to memory as best you can.");
-        rules.get(1).getElement().getStyle().setFontSize(2, Unit.EM);
+        rules.get(1).getElement().getStyle().setFontSize(1.5, Unit.EM);
         rules.get(2).setText("2. Select another card, try to match them up!");
-        rules.get(2).getElement().getStyle().setFontSize(2, Unit.EM);
+        rules.get(2).getElement().getStyle().setFontSize(1.5, Unit.EM);
         rules.get(3).setText("3. If you don't make a match, it is the next player's turn.");
-        rules.get(3).getElement().getStyle().setFontSize(2, Unit.EM);
+        rules.get(3).getElement().getStyle().setFontSize(1.5, Unit.EM);
         rules.get(4).setText("4. Otherwise you found a match! Go again!");
-        rules.get(4).getElement().getStyle().setFontSize(2, Unit.EM);
+        rules.get(4).getElement().getStyle().setFontSize(1.5, Unit.EM);
         rules.get(5).setText("5. Whoever has the most matches at the end wins!");
-        rules.get(5).getElement().getStyle().setFontSize(2, Unit.EM);
+        rules.get(5).getElement().getStyle().setFontSize(1.5, Unit.EM);
         // Create a bottom aligned VerticalPanel for information
         VerticalPanel staticInfo = new VerticalPanel();
         // staticInfo.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
@@ -583,18 +583,22 @@ public class memory implements EntryPoint {
             Label totalAttempts = new Label();
             Label totalMatches = new Label();
             Label guessingSuccess = new Label();
+            Label totalPoints = new Label();
 
             totalAttempts.setHeight("200");
             totalMatches.setHeight("200");
             guessingSuccess.setHeight("200");
+            totalPoints.setHeight("200");
 
             totalAttempts.setText("Total Attempts: 0");
             totalMatches.setText("Total Matches: 0");
             guessingSuccess.setText("Successful Match Rate: 0");
+            totalPoints.setText("Total points: 0");
 
-            totalAttempts.getElement().getStyle().setFontSize(3, Unit.EM);
-            totalMatches.getElement().getStyle().setFontSize(3, Unit.EM);
-            guessingSuccess.getElement().getStyle().setFontSize(3, Unit.EM);
+            totalAttempts.getElement().getStyle().setFontSize(2.5, Unit.EM);
+            totalMatches.getElement().getStyle().setFontSize(2.5, Unit.EM);
+            guessingSuccess.getElement().getStyle().setFontSize(2.5, Unit.EM);
+            totalPoints.getElement().getStyle().setFontSize(2.5, Unit.EM);
 
             VerticalPanel panel = new VerticalPanel();
 
@@ -602,6 +606,7 @@ public class memory implements EntryPoint {
             panel.add(totalAttempts);
             panel.add(totalMatches);
             panel.add(guessingSuccess);
+            panel.add(totalPoints);
 
             String tabTitle = players.get(i).getPlayerName();
             infoPanel.add(panel, tabTitle);

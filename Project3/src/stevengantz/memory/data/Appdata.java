@@ -31,6 +31,13 @@ public class Appdata {
     public static int NUMROWS = 5;
     public static int NUMCOLS = 6;
     public static int NUMBEROFCARDS = Appdata.NUMROWS * Appdata.NUMCOLS / 2;
+    
+    /**
+     * Point values
+     */
+    public static int POINTSPERMATCH = 25;
+    public static int MATCHWILDSPOINTS = 100;
+    public static int TWOCARDSLEFTPOINTS = 20;
 
     /**
      * Error image - TODO temporarily front image

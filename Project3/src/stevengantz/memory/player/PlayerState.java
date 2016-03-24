@@ -20,6 +20,11 @@ public class PlayerState {
      * Total number of times the user played a turn
      */
     private int totalAttempts;
+    
+    /**
+     * Total points scored
+     */
+    private int totalPoints;
 
     /**
      * General constructor initializes values at 0
@@ -27,6 +32,7 @@ public class PlayerState {
     public PlayerState() {
         this.totalAttempts = 0;
         this.totalMatches = 0;
+        this.totalPoints = 0;
     }
 
     /**
@@ -44,6 +50,14 @@ public class PlayerState {
     }
 
     // Getters and Setters
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+    
     public int getTotalMatches() {
         return this.totalMatches;
     }
