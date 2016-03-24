@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.google.gwt.core.client.Duration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
@@ -63,6 +64,13 @@ public class MemoryGameDriver {
      */
     public Player currentPlayer;
     public int currentPlayerNumber;
+    
+    /**
+     * Audio elements
+     */
+    public Audio cardFlipNoise;
+    public Audio wrongNoise;
+    public Audio matchNoise;
 
     /**
      * This constructor uses an internal board of Memory cards to make changes
@@ -77,6 +85,13 @@ public class MemoryGameDriver {
         this.infoPanel = infoPanel;
         clickable = true;
         timeObject = new Duration();
+        this.cardFlipNoise = Audio.createIfSupported();
+        this.wrongNoise = Audio.createIfSupported();
+        this.matchNoise = Audio.createIfSupported();
+        
+        this.cardFlipNoise.setSrc("flipcard.wav");
+        this.wrongNoise.setSrc("wrong.wav");
+        this.matchNoise.setSrc("match.wav");
     }
 
     /**
@@ -308,6 +323,7 @@ public class MemoryGameDriver {
      */
     protected void selectedFirstCard(MemoryCard currentCard, int selectedCard) {
         currentCard.face.setUrl(currentCard.frontFace.getUrl());
+        this.cardFlipNoise.play();
         gamedata.firstCard = currentCard;
         if (gamedata.firstCard.paired) {
             Window.alert("That card is already part of a matched pair!");
@@ -316,7 +332,7 @@ public class MemoryGameDriver {
             return;
         } else {
             gamedata.gamePhase = 1;
-        }
+        } 
     }
 
     /**
@@ -362,6 +378,8 @@ public class MemoryGameDriver {
             currentPlayer.addAttempt();
             currentPlayer.addMatch();
 
+            this.matchNoise.play();
+            
             // Update the info panel
             updateInfoPanel();
 
@@ -390,6 +408,8 @@ public class MemoryGameDriver {
 
             // This is considered an attempt, increment for current player
             currentPlayer.addAttempt();
+            
+            this.wrongNoise.play();
 
             // Check for win
             checkForWin();

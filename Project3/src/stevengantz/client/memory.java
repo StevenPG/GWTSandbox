@@ -8,6 +8,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ContextMenuEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -32,6 +33,7 @@ import stevengantz.memory.data.Appdata;
 import stevengantz.memory.player.ComputerPlayer;
 import stevengantz.memory.player.HumanPlayer;
 import stevengantz.memory.player.Player;
+import stevengantz.memory.structure.ContextMenu;
 import stevengantz.memory.structure.MemoryGameBoard;
 import stevengantz.memory.structure.MemoryGameDriver;
 import stevengantz.memory.structure.MemoryLayoutPanel;
@@ -356,12 +358,15 @@ public class memory implements EntryPoint {
 
         // Generate game panel
         VerticalGamePanel centerGamePanel = buildGamePanel();
+        centerGamePanel.addDomHandler(new ContextMenu(), ContextMenuEvent.getType());
 
         // Generate information panel
         this.infoPanel = createInfoPanel(numberOfPlayers);
+        this.infoPanel.addDomHandler(new ContextMenu(), ContextMenuEvent.getType());
 
         // Generate general game data and static info panel
         VerticalPanel staticPanel = createStaticPanel();
+        staticPanel.addDomHandler(new ContextMenu(), ContextMenuEvent.getType());
 
         // Add individual pieces to DockPanel
         mainPanel.addEast(staticPanel, Appdata.WINDOWWIDTH / 5);
