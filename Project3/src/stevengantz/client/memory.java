@@ -9,10 +9,14 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Window;
@@ -447,41 +451,39 @@ public class memory implements EntryPoint {
             toggleButton.setEnabled(false);
         }
 
-        toggleButton.addClickHandler(new ClickHandler() {
+        toggleButton.addMouseDownHandler(new MouseDownHandler() {
+            
             @Override
-            public void onClick(ClickEvent event) {
-                if (driver.clickable == false) {
-                    return;
-                }
-
-                // else
-                cheatEnabled = !cheatEnabled;
-                if (cheatEnabled) {
-                    toggleButton.setText("Cheat: Enabled");
-                    // assign phase into phase 2 to stop play
-                    driver.gamedata.gamePhase = 2;
-                    // Window.alert("Enable cheat");
-                    for (int i = 0; i < board.totalCards(); i++) {
-                        board.getCard(i).face.setUrl(board.getCard(i).frontFace.getUrl());
-                    }
-                } else {
-                    toggleButton.setText("Cheat: Disabled");
-                    // assign phase back to phase 0 to resume play
-                    driver.gamedata.gamePhase = 0;
-                    // Window.alert("Disable cheat");
-                    for (int i = 0; i < board.totalCards(); i++) {
-                        // Only flip them back over if they are not a part of a
-                        // pair
-                        if (!board.getCard(i).paired) {
-                            board.getCard(i).face.setUrl(Appdata.REARIMAGE);
-                        } else {
-                            // Don't do anything and leave the card face up
-                        }
+            public void onMouseDown(MouseDownEvent event) {
+                toggleButton.setText("Cheat: Enabled");
+                // assign phase into phase 2 to stop play
+                driver.gamedata.gamePhase = 2;
+                // Window.alert("Enable cheat");
+                for (int i = 0; i < board.totalCards(); i++) {
+                    board.getCard(i).face.setUrl(board.getCard(i).frontFace.getUrl());
+                }   
+            }
+        });
+        
+        toggleButton.addMouseUpHandler(new MouseUpHandler() {
+            @Override
+            public void onMouseUp(MouseUpEvent event) {
+                toggleButton.setText("Cheat: Disabled");
+                // assign phase back to phase 0 to resume play
+                driver.gamedata.gamePhase = 0;
+                // Window.alert("Disable cheat");
+                for (int i = 0; i < board.totalCards(); i++) {
+                    // Only flip them back over if they are not a part of a
+                    // pair
+                    if (!board.getCard(i).paired) {
+                        board.getCard(i).face.setUrl(Appdata.REARIMAGE);
+                    } else {
+                        // Don't do anything and leave the card face up
                     }
                 }
             }
         });
-
+        
         // Assign data to structures
         horiz.add(toggleButton);
 
