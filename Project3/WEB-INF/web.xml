@@ -5,11 +5,20 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
-  <!-- Servlets -->
-  
-  <!-- Default page to serve -->
+ <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>memory.html</welcome-file>
   </welcome-file-list>
+
+  <!-- Servlets -->
+  <servlet>
+  	<servlet-name>MessageServiceImpl</servlet-name>
+  	<servlet-class>stevengantz.server.MemoryGameServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>MessageServiceImpl</servlet-name>
+  	<url-pattern>message</url-pattern>
+  </servlet-mapping>
 
 </web-app>

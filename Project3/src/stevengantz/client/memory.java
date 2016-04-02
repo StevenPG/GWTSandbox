@@ -290,11 +290,17 @@ public class memory implements EntryPoint {
                 computer.setEnabled(false);
             }
 
-            // Build panel
-            dataPanel.add(playerLabel);
-            dataPanel.add(playerName);
-            dataPanel.add(human);
-            dataPanel.add(computer);
+            // Build panel with labels
+            {
+                dataPanel.add(playerLabel);
+                dataPanel.add(playerName);
+            }
+            
+            // Build values in panel
+            {
+                dataPanel.add(human);
+                dataPanel.add(computer);
+            }
 
             // Add new horizontal panel to main panel
             main.add(dataPanel);
@@ -309,6 +315,8 @@ public class memory implements EntryPoint {
             @Override
             public void onClick(ClickEvent event) {
 
+                // initially no cpu players playing
+                Appdata.AiIsPlaying = false;
                 for (int i = 0; i < playerNames.size(); i++) {
 
                     // Create player
@@ -316,6 +324,7 @@ public class memory implements EntryPoint {
                         players.add(new HumanPlayer(playerNames.get(i).getText()));
                     } else {
                         players.add(new ComputerPlayer(playerNames.get(i).getText(), 0));
+                        Appdata.AiIsPlaying = true;
                     }
                 }
 
@@ -452,7 +461,7 @@ public class memory implements EntryPoint {
         }
 
         toggleButton.addMouseDownHandler(new MouseDownHandler() {
-            
+
             @Override
             public void onMouseDown(MouseDownEvent event) {
                 toggleButton.setText("Cheat: Enabled");
@@ -461,10 +470,10 @@ public class memory implements EntryPoint {
                 // Window.alert("Enable cheat");
                 for (int i = 0; i < board.totalCards(); i++) {
                     board.getCard(i).face.setUrl(board.getCard(i).frontFace.getUrl());
-                }   
+                }
             }
         });
-        
+
         toggleButton.addMouseUpHandler(new MouseUpHandler() {
             @Override
             public void onMouseUp(MouseUpEvent event) {
@@ -483,7 +492,7 @@ public class memory implements EntryPoint {
                 }
             }
         });
-        
+
         // Assign data to structures
         horiz.add(toggleButton);
 

@@ -3,6 +3,7 @@ package stevengantz.memory.structure;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.Duration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -64,7 +65,7 @@ public class MemoryGameDriver {
      */
     public Player currentPlayer;
     public int currentPlayerNumber;
-    
+
     /**
      * Audio elements
      */
@@ -88,7 +89,7 @@ public class MemoryGameDriver {
         this.cardFlipNoise = Audio.createIfSupported();
         this.wrongNoise = Audio.createIfSupported();
         this.matchNoise = Audio.createIfSupported();
-        
+
         this.cardFlipNoise.setSrc("flipcard.wav");
         this.wrongNoise.setSrc("wrong.wav");
         this.matchNoise.setSrc("match.wav");
@@ -104,6 +105,13 @@ public class MemoryGameDriver {
 
         // Move on to next player in array
         currentPlayerNumber++;
+
+        // TODO
+        // Adding prototype async code
+        // MessageServiceAsync memAsync = GWT.create(MemoryGameService.class);
+        // memAsync.getMessage(currentPlayer.getPlayerName(), new
+        // MessageCallBack());
+        // End prototype async code
 
         // If this is larger than number of players, reset to 0
         if (currentPlayerNumber == players.size()) {
@@ -136,7 +144,7 @@ public class MemoryGameDriver {
                 }
             };
 
-            wait.schedule(750);
+            wait.schedule(1500);
 
         } else {
             gamedata.gamePhase = 0;
@@ -285,8 +293,15 @@ public class MemoryGameDriver {
 
             clickable = true;
 
-            // Play again if it was a match
-            playAITurn();
+            Timer wait = new Timer() {
+                @Override
+                public void run() {
+                    // Play again if it was a match
+                    playAITurn();
+                }
+            };
+
+            wait.schedule(1500);
 
         } else {
             // It wasn't a match
@@ -302,15 +317,13 @@ public class MemoryGameDriver {
                     firstCard.face.setUrl(Appdata.REARIMAGE);
                     secondCard.face.setUrl(Appdata.REARIMAGE);
                     clickable = true;
+                    return;
                 }
             };
 
             // Schedule timer to run
             wait.schedule(1500);
-            
-            
-
-            return;
+            // return;
 
         }
 
@@ -328,6 +341,7 @@ public class MemoryGameDriver {
         currentCard.face.setUrl(currentCard.frontFace.getUrl());
         this.cardFlipNoise.play();
         gamedata.firstCard = currentCard;
+        
         if (gamedata.firstCard.paired) {
             Window.alert("That card is already part of a matched pair!");
             // Reset phase to 0
@@ -335,7 +349,14 @@ public class MemoryGameDriver {
             return;
         } else {
             gamedata.gamePhase = 1;
-        } 
+            if(Appdata.AiIsPlaying){
+                for(Player player : this.players){
+                    if(player instanceof ComputerPlayer){
+                        ((ComputerPlayer) player).rememberCard(currentCard);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -360,6 +381,13 @@ public class MemoryGameDriver {
                 currentCard.face.setUrl(currentCard.frontFace.getUrl());
                 gamedata.secondCard = currentCard;
                 gamedata.gamePhase = 2;
+                if(Appdata.AiIsPlaying){
+                    for(Player player : this.players){
+                        if(player instanceof ComputerPlayer){
+                            ((ComputerPlayer) player).rememberCard(currentCard);
+                        }
+                    }
+                }
             }
 
             // Check for a match
@@ -383,7 +411,7 @@ public class MemoryGameDriver {
 
             this.matchNoise.play();
             currentPlayer.addPoints(Appdata.POINTSPERMATCH);
-            
+
             // Update the info panel
             updateInfoPanel();
 
@@ -412,7 +440,7 @@ public class MemoryGameDriver {
 
             // This is considered an attempt, increment for current player
             currentPlayer.addAttempt();
-            
+
             this.wrongNoise.play();
 
             // Check for win
@@ -431,6 +459,12 @@ public class MemoryGameDriver {
      */
     protected boolean checkForWin() {
 
+        //TODO
+        // Play animation just for testing
+        Animation anim = new CustomAnimation();
+        anim.run(1000);
+        
+        
         // Look and see if every card is paired, then see who won
         for (int i = 0; i < this.board.totalCards(); i++) {
             if (!this.board.getCard(i).paired) {
@@ -446,7 +480,9 @@ public class MemoryGameDriver {
         }
 
         String stats = builder.toString();
-        
+
+        Window.alert("Display animation based on current user's score");
+
         if (Window.confirm("Game over!\n" + stats + "\nPlay again? Cancel to quit.")) {
             // Play again
             Window.Location.reload();

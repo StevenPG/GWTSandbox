@@ -19,6 +19,17 @@ public class Appdata {
     public static int WINDOWHEIGHT = Window.getClientHeight();
 
     /**
+     * There are 3 levels of AI Difficulty that decides how the AI makes it's
+     * decisions. These are set in the main menu and in the context menu.
+     */
+    public static int AiDifficulty;
+
+    /**
+     * Hold whether to display AI or not
+     */
+    public static boolean AiIsPlaying;
+
+    /**
      * Card pixel sizes, playing cards are 16x9 Useful resource:
      * http://andrew.hedges.name/experiments/aspect_ratio/
      */
@@ -31,7 +42,7 @@ public class Appdata {
     public static int NUMROWS = 5;
     public static int NUMCOLS = 6;
     public static int NUMBEROFCARDS = Appdata.NUMROWS * Appdata.NUMCOLS / 2;
-    
+
     /**
      * Point values
      */
@@ -43,7 +54,7 @@ public class Appdata {
      * Error image - TODO temporarily front image
      */
     public static String ERRORIMAGE = "http://i.imgur.com/74FVTpV.jpg?1";
-    
+
     public static String CHEATSON = "img/cheatsEnabled.png";
     public static String CHEATSOFF = "img/cheatsDisabled.png";
 
