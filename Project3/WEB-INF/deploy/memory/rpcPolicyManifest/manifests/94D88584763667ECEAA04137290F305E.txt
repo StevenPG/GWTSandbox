@@ -1,0 +1,2 @@
+serviceClass: stevengantz.client.MemoryGameService
+path: E7A35A16D8F0E7116243C8A6F178854C.gwt.rpc

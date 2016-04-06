@@ -21,6 +21,11 @@ public class MemoryCard {
      */
     public Image rearFace;
     
+    /**
+     * Whether card is wild or not
+     */
+    public boolean iswild;
+    
     public Image selectedRearFace;
 
     /**

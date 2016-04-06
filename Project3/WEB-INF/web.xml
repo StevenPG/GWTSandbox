@@ -12,13 +12,13 @@
 
   <!-- Servlets -->
   <servlet>
-  	<servlet-name>MessageServiceImpl</servlet-name>
+  	<servlet-name>MemoryGameServiceImpl</servlet-name>
   	<servlet-class>stevengantz.server.MemoryGameServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-  	<servlet-name>MessageServiceImpl</servlet-name>
-  	<url-pattern>message</url-pattern>
+  	<servlet-name>MemoryGameServiceImpl</servlet-name>
+  	<url-pattern>/memory/memorygame</url-pattern>
   </servlet-mapping>
 
 </web-app>

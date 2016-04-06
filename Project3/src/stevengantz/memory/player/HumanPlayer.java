@@ -1,5 +1,8 @@
 package stevengantz.memory.player;
 
+import stevengantz.memory.card.MemoryCard;
+import stevengantz.memory.structure.MemoryGameBoard;
+
 /**
  * @author Steven Gantz
  * @date 3/7/2016
@@ -20,5 +23,23 @@ public class HumanPlayer extends MemoryPlayer implements Player {
     public HumanPlayer(String name) {
         this.playerName = name;
         this.state = new PlayerState();
+    }
+
+    @Override
+    public MemoryCard getFirstChoice(MemoryGameBoard board) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public MemoryCard getSecondChoice(MemoryGameBoard board) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void addCardsToMatchList(MemoryCard firstCard, MemoryCard secondCard) {
+        // TODO Auto-generated method stub
+        
     }
 }

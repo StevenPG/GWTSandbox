@@ -3,8 +3,6 @@ package stevengantz.memory.player;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.google.gwt.user.client.Window;
-
 import stevengantz.memory.card.MemoryCard;
 import stevengantz.memory.data.Appdata;
 import stevengantz.memory.structure.MemoryGameBoard;
@@ -38,6 +36,12 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
     private int internalPhase;
 
     /**
+     * Ai first and second card for easy retrieval from memory
+     */
+    private MemoryCard firstCard;
+    private MemoryCard secondCard;
+
+    /**
      * Number gotten from first retrieval method
      */
     private int firstNumberRetrieved;
@@ -60,8 +64,10 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
         this.pairList = new ArrayList<MemoryCard>();
         setInternalPhase(0);
         random = new Random();
-        firstNumberRetrieved = -1;
+        firstNumberRetrieved = 0;
         // cardSpots = new ArrayList<Integer>();
+        this.firstCard = null;
+        this.secondCard = null;
     }
 
     /**
@@ -72,6 +78,11 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
      */
     public void rememberCard(MemoryCard card) {
         Random rnd = new Random();
+
+        // Don't remember a paired card
+        if (card.paired) {
+            return;
+        }
 
         // If card is already in memory, don't remember it
         if (this.cardMemory.contains(card)) {
@@ -96,7 +107,6 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
             // 60% chance to remember card
             if (randomNumber < 6) {
                 this.cardMemory.add(card);
-                Window.alert("Remembered " + card.getFrontFace().getUrl());
             } else {
                 // Don't remember the card
             }
@@ -112,38 +122,6 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
                 // Don't remember the card
             }
         }
-    }
-
-    /**
-     * Guess a card directly from memory if it exists
-     * 
-     * @param card
-     *            card to compare against
-     * @return
-     */
-    private MemoryCard guessCardFromMemory(MemoryCard card) {
-
-        // DEBUG
-        StringBuilder builder = new StringBuilder();
-        for (MemoryCard mem : this.cardMemory) {
-            builder.append(mem.getFrontFace().getUrl() + "\n");
-        }
-        Window.alert("Memory: " + builder.toString());
-
-        for (MemoryCard mem : this.cardMemory) {
-            if (mem.getFrontFace().getUrl().equals(card.getFrontFace().getUrl())) {
-                // They also aren't the same card
-                if (mem != card) {
-                    Window.alert("Guessed from Memory");
-                    return mem;
-                } else {
-                    // The game picked the same card twice from memory
-                    Window.alert("Game picked same card twice from memory");
-                }
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -204,62 +182,33 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
         // If there is a pair of cards in memory, choose one of the pair
         // automagically using double foreach loop
         for (MemoryCard outercard : this.cardMemory) {
-            if(outercard.paired){
-                continue;
-            }
             for (MemoryCard innercard : this.cardMemory) {
-                if(innercard.paired){
-                    continue;
-                }
                 if (outercard != innercard) {
+                    // If both cards are unpaired
                     if (outercard.getFrontFace().getUrl().equals(innercard.getFrontFace().getUrl())) {
                         // There is a pair already in memory, choose the outer
                         // card
-                        Window.alert("Default to a match in memory!");
-                        return outercard;
+                        this.firstCard = outercard;
+                        this.secondCard = innercard;
+                        return this.firstCard;
                     }
                 } else {
                     // This is the same card reference
+                    // Don't do anything
                 }
+
             }
         }
 
-        // Easy mode
-        if (Appdata.AiDifficulty == 0) {
+        // Otherwise
+        firstNumberRetrieved = random.nextInt(30);
+        MemoryCard firstCard = board.getCard(firstNumberRetrieved);
+        while (!isCardValid(firstCard)) {
             firstNumberRetrieved = random.nextInt(30);
-            MemoryCard firstCard = board.getCard(firstNumberRetrieved);
-            while (!isCardValid(firstCard)) {
-                firstNumberRetrieved = random.nextInt(30);
-                firstCard = board.getCard(firstNumberRetrieved);
-            }
-            this.rememberCard(firstCard);
-            return firstCard;
+            firstCard = board.getCard(firstNumberRetrieved);
         }
-        // Medium mode
-        if (Appdata.AiDifficulty == 1) {
-            firstNumberRetrieved = random.nextInt(30);
-            MemoryCard firstCard = board.getCard(firstNumberRetrieved);
-            while (!isCardValid(firstCard)) {
-                firstNumberRetrieved = random.nextInt(30);
-                firstCard = board.getCard(firstNumberRetrieved);
-            }
-            this.rememberCard(firstCard);
-            return firstCard;
-        }
-        // Hard mode
-        if (Appdata.AiDifficulty == 2) {
-            firstNumberRetrieved = random.nextInt(30);
-            MemoryCard firstCard = board.getCard(firstNumberRetrieved);
-            while (!isCardValid(firstCard)) {
-                firstNumberRetrieved = random.nextInt(30);
-                firstCard = board.getCard(firstNumberRetrieved);
-            }
-            this.rememberCard(firstCard);
-            return firstCard;
-        }
-
-        assert false;
-        return null;
+        this.rememberCard(firstCard);
+        return firstCard;
     }
 
     /**
@@ -275,71 +224,33 @@ public class ComputerPlayer extends MemoryPlayer implements Player {
 
         // Check in memory first
         MemoryCard firstCard = board.getCard(firstNumberRetrieved);
-        MemoryCard matchedCard = this.guessCardFromMemory(firstCard);
+        MemoryCard matchedCard = this.secondCard;
+
         if (matchedCard != null) {
-            // Found the card in memory, return that card
-            Window.alert("Matched card from memory");
+            this.cardMemory.remove(firstCard);
+            this.cardMemory.remove(matchedCard);
+            
+            this.firstCard = null;
+            this.secondCard = null;
+            
             return matchedCard;
         } else {
-            // otherwise
-
-            // Easy mode
-            if (Appdata.AiDifficulty == 0) {
-                int secondNumber = 0;
-                while (!valid) {
-                    secondNumber = random.nextInt(30);
-                    if (!(secondNumber == firstNumberRetrieved)) {
-                        if (isCardValid(board.getCard(secondNumber))) {
-                            valid = true;
-                        } else {
-                            valid = false;
-                        }
+            // Otherwise do it randomly
+            int secondNumber = 0;
+            while (!valid) {
+                secondNumber = random.nextInt(30);
+                if (!(secondNumber == firstNumberRetrieved)) {
+                    if (isCardValid(board.getCard(secondNumber))) {
+                        valid = true;
                     } else {
                         valid = false;
                     }
+                } else {
+                    valid = false;
                 }
-                this.rememberCard(firstCard);
-                return board.getCard(secondNumber);
             }
-
-            // Medium mode
-            if (Appdata.AiDifficulty == 1) {
-                int secondNumber = 0;
-                while (!valid) {
-                    secondNumber = random.nextInt(30);
-                    if (!(secondNumber == firstNumberRetrieved)) {
-                        if (isCardValid(board.getCard(secondNumber))) {
-                            valid = true;
-                        } else {
-                            valid = false;
-                        }
-                    } else {
-                        valid = false;
-                    }
-                }
-                this.rememberCard(firstCard);
-                return board.getCard(secondNumber);
-            }
-
-            // Hard mode
-            if (Appdata.AiDifficulty == 2) {
-                int secondNumber = 0;
-                while (!valid) {
-                    secondNumber = random.nextInt(30);
-                    if (!(secondNumber == firstNumberRetrieved)) {
-                        if (isCardValid(board.getCard(secondNumber))) {
-                            valid = true;
-                        } else {
-                            valid = false;
-                        }
-                    } else {
-                        valid = false;
-                    }
-                }
-                this.rememberCard(firstCard);
-                return board.getCard(secondNumber);
-            }
-            return null;
+            this.rememberCard(board.getCard(secondNumber));
+            return board.getCard(secondNumber);
         }
     }
 

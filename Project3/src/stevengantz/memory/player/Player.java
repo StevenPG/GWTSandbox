@@ -1,5 +1,8 @@
 package stevengantz.memory.player;
 
+import stevengantz.memory.card.MemoryCard;
+import stevengantz.memory.structure.MemoryGameBoard;
+
 /**
  * @author Steven Gantz
  * @date 3/6/2016
@@ -47,4 +50,10 @@ public interface Player {
      * @param points number of points
      */
     public void addPoints(int points);
+
+    public MemoryCard getFirstChoice(MemoryGameBoard board);
+
+    public MemoryCard getSecondChoice(MemoryGameBoard board);
+
+    public void addCardsToMatchList(MemoryCard firstCard, MemoryCard secondCard);
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -20,6 +21,7 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -58,6 +60,11 @@ public class memory implements EntryPoint {
      */
     boolean cheatEnabled = false;
     boolean cheatsShown = true;
+
+    /**
+     * Open connection to server with deferred binding RPC class
+     */
+    MemoryGameServiceAsync gameServer;
 
     /**
      * Contain the driver at a high level for easier access throughout code
@@ -102,6 +109,8 @@ public class memory implements EntryPoint {
         names = new ArrayList<String>();
         isHuman = new ArrayList<Boolean>();
 
+        gameServer = (MemoryGameServiceAsync) GWT.create(MemoryGameService.class);
+
         // Start the music
         this.audioTrack = Audio.createIfSupported();
         this.audioTrack.setLoop(true);
@@ -129,15 +138,14 @@ public class memory implements EntryPoint {
         MemoryLayoutPanel mainPanel = createVisualStructure(players.size());
 
         // Initialize the GUI and game driver
-        driver = new MemoryGameDriver(this.board, players, this.infoPanel);
-
-        // Assign background image to rootlayoutpanel
+        driver = new MemoryGameDriver(this.board, players, this.infoPanel, this.gameServer);
 
         // Start GUI
         RootLayoutPanel.get().add(mainPanel);
 
         // Begin game using driver's external method call
         driver.playGame();
+
     }
 
     /**
@@ -186,6 +194,33 @@ public class memory implements EntryPoint {
         radioButtonPanel.add(twoPlayer);
         radioButtonPanel.add(threePlayer);
         radioButtonPanel.add(fourPlayer);
+
+        HorizontalPanel internetPanel = new HorizontalPanel();
+        final Button internet = new Button("Attempting to Connect to Server...");
+        internet.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                gameServer.startLobby(new AsyncCallback<Boolean>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        return;
+                        // Send user to a new screen
+                        // clear the rootPanel
+                        // Display new internet lobby panel
+                        // Then move to this panel
+                        // Emulate everything done in transitionMainMenu
+                        // closeMainMenuStartGame using InternetPlayers
+                    }
+                });
+            }
+        });
+        internetPanel.add(internet);
 
         Button next = new Button();
         next.setText("Next");
@@ -242,11 +277,67 @@ public class memory implements EntryPoint {
         mainMenu.add(title);
         mainMenu.add(Question);
         mainMenu.add(radioButtonPanel);
+        mainMenu.add(internetPanel);
         mainMenu.add(next);
         mainMenu.add(audio);
         mainMenu.add(horiz);
 
+        // Do initial handshake to make sure server is up and running
+        this.gameServer.attemptHandshake(new AsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                internet.setText("Connected to Server...");
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                internet.setText("Could not connect to server...");
+                Window.alert(caught.getMessage());
+            }
+        });
+
+        // Set text to play or join based on whether game exists
+        // Check if game is running to display text
+        this.gameServer.isGameRunning(new AsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean gameRunning) {
+                if (gameRunning) {
+                    internet.setText("Game currently in progress... Unable to join...");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        });
+
+        // See if there is an available lobby, if not, button may create one
+        this.gameServer.isLobbyRunning(new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+
+            @Override
+            public void onSuccess(Boolean isLobbyActive) {
+                if (isLobbyActive) {
+                    internet.setText("Join multiplayer lobby");
+                } else {
+                    internet.setText("Start multiplayer lobby");
+                }
+            }
+        });
+
         return mainMenu;
+    }
+    
+    /**
+     * Replaces the transitionMainMenu by creating a lobby view for users
+     * before the game starts.
+     */
+    protected void multiplayerLobbyMenu(){
+        
     }
 
     /**
@@ -295,7 +386,7 @@ public class memory implements EntryPoint {
                 dataPanel.add(playerLabel);
                 dataPanel.add(playerName);
             }
-            
+
             // Build values in panel
             {
                 dataPanel.add(human);
@@ -745,6 +836,15 @@ public class memory implements EntryPoint {
             // Generate MemoryCard object
             MemoryCard mem = generateCard(front, back, selected);
             MemoryCard memPair = generateCard(frontPair, backPair, selectedPair);
+
+            // Set card to wild if it is ada
+            if (frontImageList.get(index).equals("img/cardfaces/ada.png")) {
+                mem.iswild = true;
+                memPair.iswild = true;
+            } else {
+                mem.iswild = false;
+                memPair.iswild = false;
+            }
 
             // Add memory card to the list
             cardList.add(mem);

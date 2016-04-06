@@ -1,8 +1,6 @@
 package stevengantz.memory.structure;
 
 import com.google.gwt.animation.client.Animation;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 /**

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import stevengantz.client.MemoryGameServiceAsync;
 import stevengantz.memory.card.MemoryCard;
 import stevengantz.memory.data.Appdata;
 import stevengantz.memory.data.GameData;
@@ -44,6 +45,11 @@ public class MemoryGameDriver {
      * Instantiate reference for duration object
      */
     protected Duration timeObject;
+
+    /**
+     * Generate remote service proxy to talk to server
+     */
+    private final MemoryGameServiceAsync gameServer;
 
     /**
      * Contains game fields internally
@@ -77,7 +83,8 @@ public class MemoryGameDriver {
      * This constructor uses an internal board of Memory cards to make changes
      * and drive the course of the game.
      */
-    public MemoryGameDriver(MemoryGameBoard board, ArrayList<Player> players, TabLayoutPanel infoPanel) {
+    public MemoryGameDriver(MemoryGameBoard board, ArrayList<Player> players, TabLayoutPanel infoPanel,
+            MemoryGameServiceAsync gameServer) {
         this.board = board;
         this.players = players;
         currentPlayerNumber = 0;
@@ -93,6 +100,9 @@ public class MemoryGameDriver {
         this.cardFlipNoise.setSrc("flipcard.wav");
         this.wrongNoise.setSrc("wrong.wav");
         this.matchNoise.setSrc("match.wav");
+
+        // Retrieve game server connection
+        this.gameServer = gameServer;
     }
 
     /**
@@ -270,7 +280,7 @@ public class MemoryGameDriver {
 
         String card1 = firstCard.frontFace.getUrl();
         String card2 = secondCard.frontFace.getUrl();
-        if (card1.equals(card2)) {
+        if (card1.equals(card2) || firstCard.iswild || secondCard.iswild) {
             firstCard.paired = true;
             secondCard.paired = true;
 
@@ -293,15 +303,7 @@ public class MemoryGameDriver {
 
             clickable = true;
 
-            Timer wait = new Timer() {
-                @Override
-                public void run() {
-                    // Play again if it was a match
-                    playAITurn();
-                }
-            };
-
-            wait.schedule(1500);
+            playAITurn();
 
         } else {
             // It wasn't a match
@@ -341,7 +343,7 @@ public class MemoryGameDriver {
         currentCard.face.setUrl(currentCard.frontFace.getUrl());
         this.cardFlipNoise.play();
         gamedata.firstCard = currentCard;
-        
+
         if (gamedata.firstCard.paired) {
             Window.alert("That card is already part of a matched pair!");
             // Reset phase to 0
@@ -349,9 +351,9 @@ public class MemoryGameDriver {
             return;
         } else {
             gamedata.gamePhase = 1;
-            if(Appdata.AiIsPlaying){
-                for(Player player : this.players){
-                    if(player instanceof ComputerPlayer){
+            if (Appdata.AiIsPlaying) {
+                for (Player player : this.players) {
+                    if (player instanceof ComputerPlayer) {
                         ((ComputerPlayer) player).rememberCard(currentCard);
                     }
                 }
@@ -381,9 +383,9 @@ public class MemoryGameDriver {
                 currentCard.face.setUrl(currentCard.frontFace.getUrl());
                 gamedata.secondCard = currentCard;
                 gamedata.gamePhase = 2;
-                if(Appdata.AiIsPlaying){
-                    for(Player player : this.players){
-                        if(player instanceof ComputerPlayer){
+                if (Appdata.AiIsPlaying) {
+                    for (Player player : this.players) {
+                        if (player instanceof ComputerPlayer) {
                             ((ComputerPlayer) player).rememberCard(currentCard);
                         }
                     }
@@ -401,7 +403,7 @@ public class MemoryGameDriver {
     protected void checkForMatch() {
         String card1 = gamedata.firstCard.frontFace.getUrl();
         String card2 = gamedata.secondCard.frontFace.getUrl();
-        if (card1 == card2) {
+        if (card1 == card2 || gamedata.firstCard.iswild || gamedata.secondCard.iswild) {
             gamedata.firstCard.paired = true;
             gamedata.secondCard.paired = true;
 
@@ -410,7 +412,13 @@ public class MemoryGameDriver {
             currentPlayer.addMatch();
 
             this.matchNoise.play();
-            currentPlayer.addPoints(Appdata.POINTSPERMATCH);
+            if (gamedata.firstCard.iswild && gamedata.secondCard.iswild) {
+                currentPlayer.addPoints(Appdata.MATCHWILDSPOINTS);
+                // TODO Play animation as per spec
+                Window.alert("You've matched two wild cards!!");
+            } else {
+                currentPlayer.addPoints(Appdata.POINTSPERMATCH);
+            }
 
             // Update the info panel
             updateInfoPanel();
@@ -459,43 +467,55 @@ public class MemoryGameDriver {
      */
     protected boolean checkForWin() {
 
-        //TODO
+        // TODO
         // Play animation just for testing
         Animation anim = new CustomAnimation();
         anim.run(1000);
-        
-        
-        // Look and see if every card is paired, then see who won
-        for (int i = 0; i < this.board.totalCards(); i++) {
-            if (!this.board.getCard(i).paired) {
-                return false;
+
+        // Check if two are left
+        boolean isGameOver = this.board.checkIfBoardHasTwoLeft();
+
+        // If isGameOver with two left, current player gets 20 points
+        if (isGameOver) {
+            this.currentPlayer.addPoints(Appdata.TWOCARDSLEFTPOINTS);
+
+            updateInfoPanel();
+
+            // Display info for players
+            StringBuilder builder = new StringBuilder();
+            for (Player player : this.players) {
+                builder.append(player.getPlayerName() + " took " + player.getTotalAttempts() + " turns to get "
+                        + player.getTotalMatches() + " matches.\n");
             }
-        }
 
-        // Display info for players
-        StringBuilder builder = new StringBuilder();
-        for (Player player : this.players) {
-            builder.append(player.getPlayerName() + " took " + player.getTotalAttempts() + " turns to get "
-                    + player.getTotalMatches() + " matches.\n");
-        }
+            String stats = builder.toString();
 
-        String stats = builder.toString();
+            Window.alert("Display animation based on current user's score");
 
-        Window.alert("Display animation based on current user's score");
-
-        if (Window.confirm("Game over!\n" + stats + "\nPlay again? Cancel to quit.")) {
-            // Play again
-            Window.Location.reload();
-            RootLayoutPanel.get().clear();
-            Window.Location.reload();
-        } else {
-            if (Window.confirm("GWT provides no way to leave... Do you want to go to Google or something?")) {
-                Window.Location.assign("https://www.google.com");
+            if (Window.confirm("Game over!\n" + stats + "\nPlay again? Cancel to quit.")) {
+                // Play again
+                Window.Location.reload();
+                RootLayoutPanel.get().clear();
+                Window.Location.reload();
             } else {
-                Window.alert("Well I don't know where to send you... so just stay here!! *Leaves*");
+                if (Window.confirm("GWT provides no way to leave... Do you want to go to Google or something?")) {
+                    Window.Location.assign("https://www.google.com");
+                } else {
+                    Window.alert("Well I don't know where to send you... so just stay here!!");
+                }
+            }
+            return true;
+
+        } else {// Otherwise don't add any points
+            // If game isn't in wildcard state, check for pairs
+            // Look and see if every card is paired, then see who won
+            for (int i = 0; i < this.board.totalCards(); i++) {
+                if (!this.board.getCard(i).paired) {
+                    return false;
+                }
             }
         }
-
-        return true;
+        assert false;
+        return isGameOver;
     }
 }

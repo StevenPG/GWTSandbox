@@ -3,6 +3,7 @@ package stevengantz.memory.structure;
 import java.util.ArrayList;
 
 import stevengantz.memory.card.MemoryCard;
+import stevengantz.memory.data.Appdata;
 import stevengantz.memory.data.GWTCollections;
 
 /**
@@ -12,7 +13,7 @@ import stevengantz.memory.data.GWTCollections;
  * @This file is a container for a virtual representation of a memory game area.
  *       It is filled with memory cards to be organized into a usable form to
  *       represent the game itself.
- *       
+ * 
  **/
 public class MemoryGameBoard {
 
@@ -91,6 +92,41 @@ public class MemoryGameBoard {
             }
         }
         return true;
+    }
+
+    /**
+     * Check if winning condition with wildcards. Iterate through all the cards
+     * to see if they are all pairs
+     * 
+     * @return
+     */
+    public boolean checkIfBoardHasTwoLeft() {
+        int totalPairedCards = 0;
+        for (MemoryCard mem : this.board) {
+            if (mem.paired) {
+                totalPairedCards++;
+            }
+        }
+
+        if (totalPairedCards == (Appdata.NUMBEROFCARDS * 2) - 2) {
+            // Check and see if wilds are paired
+            // If both are paired, then game is over
+            int pairedWilds = 0;
+            for (MemoryCard mem : this.board) {
+                if (mem.paired && mem.iswild) {
+                    pairedWilds++;
+                }
+            }
+            if (pairedWilds == 2) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            // Everything must be cool, return false
+            return false;
+        }
+
     }
 
     /**
