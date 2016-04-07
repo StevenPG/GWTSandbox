@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface MemoryGameService extends RemoteService{
     void attemptHandshake();
     boolean isGameRunning();
-    void startLobby();
+    void startLobby(String playerName);
     void closeLobby();
     boolean isLobbyRunning();
 }

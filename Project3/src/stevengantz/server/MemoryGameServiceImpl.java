@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import stevengantz.client.MemoryGameService;
+import stevengantz.shared.PlayerContainer;
 import stevengantz.shared.ServerGameDataObject;
 
 /**
@@ -21,7 +22,12 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
     /**
      * Contains data important to the current running game
      */
-    ServerGameDataObject data;
+    ServerGameDataObject game;
+    
+    /**
+     * Contains data important to currently connected players
+     */
+    PlayerContainer players;
 
     /**
      * Server configuration for use in initialization
@@ -36,7 +42,8 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.config = config;
-        this.data = new ServerGameDataObject();
+        this.game = new ServerGameDataObject();
+        players = new PlayerContainer();
     }
 
     /**
@@ -58,14 +65,21 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
      */
     @Override
     public boolean isGameRunning() {
-        return this.data.isGameRunning();
+        return this.game.isGameRunning();
     }
 
     /**
      * Start game lobby for players to join before the game
      */
-    public void startLobby() {
-        this.data.startLobby();
+    @Override
+    public void startLobby(String PlayerName) {
+        this.game.startLobby();
+        this.players.PlayerNames.add(PlayerName);
+        
+        // DEBUG
+        // Empty the list so it doesn't fill up, and close lobby
+        this.players.PlayerNames.clear();
+        this.game.closeLobby();
     }
     
     /**
@@ -73,7 +87,7 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
      */
     @Override
     public void closeLobby(){
-        this.data.closeLobby();
+        this.game.closeLobby();
     }
     
     /**
@@ -82,7 +96,7 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
      */
     @Override
     public boolean isLobbyRunning() {
-        return this.data.isLobbyStarted();
+        return this.game.isLobbyStarted();
     }
 
     /**

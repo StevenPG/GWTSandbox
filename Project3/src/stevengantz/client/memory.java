@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -196,31 +197,30 @@ public class memory implements EntryPoint {
         radioButtonPanel.add(fourPlayer);
 
         HorizontalPanel internetPanel = new HorizontalPanel();
+        final TextBox handle = new TextBox();
+        handle.setText("Enter name");
         final Button internet = new Button("Attempting to Connect to Server...");
         internet.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                gameServer.startLobby(new AsyncCallback<Boolean>() {
-
+                gameServer.startLobby(handle.getText().toString(), new AsyncCallback<Boolean>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         Window.alert(caught.getMessage());
+                        Window.alert(String.valueOf(caught.getStackTrace()));
                     }
 
                     @Override
                     public void onSuccess(Boolean result) {
                         return;
-                        // Send user to a new screen
-                        // clear the rootPanel
-                        // Display new internet lobby panel
-                        // Then move to this panel
-                        // Emulate everything done in transitionMainMenu
-                        // closeMainMenuStartGame using InternetPlayers
                     }
                 });
+
+                multiplayerLobbyMenu();
             }
         });
         internetPanel.add(internet);
+        internetPanel.add(handle);
 
         Button next = new Button();
         next.setText("Next");
@@ -331,13 +331,98 @@ public class memory implements EntryPoint {
 
         return mainMenu;
     }
-    
+
     /**
-     * Replaces the transitionMainMenu by creating a lobby view for users
-     * before the game starts.
+     * Replaces the transitionMainMenu by creating a lobby view for users before
+     * the game starts.
      */
-    protected void multiplayerLobbyMenu(){
-        
+    protected void multiplayerLobbyMenu() {
+        // Remove everything except title from RootLayoutPanel
+        final VerticalPanel lobbyPanel = (VerticalPanel) RootLayoutPanel.get().getWidget(0);
+
+        // Save title and clear the panel
+        Label title = (Label) lobbyPanel.getWidget(0);
+        lobbyPanel.clear();
+        title.setText("Multiplayer Lobby");
+
+        HorizontalPanel midPanel = new HorizontalPanel();
+
+        // Create player listing panel
+        VerticalPanel playerList = new VerticalPanel();
+
+        // Create player listings
+        Label test1 = new Label("You");
+        Label test2 = new Label("Vacant Player");
+        Label test3 = new Label("Vacant Player");
+        Label test4 = new Label("Vacant Player");
+
+        // Set label attributes
+        test1.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        test1.getElement().getStyle().setColor("white");
+        test1.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        test2.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        test2.getElement().getStyle().setColor("white");
+        test2.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        test3.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        test3.getElement().getStyle().setColor("white");
+        test3.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        test4.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        test4.getElement().getStyle().setColor("white");
+        test4.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+
+        // Add player listings to panel
+        playerList.add(test1);
+        playerList.add(test2);
+        playerList.add(test3);
+        playerList.add(test4);
+
+        // Create chat box
+        VerticalPanel chatPanel = new VerticalPanel();
+        TextArea chat = new TextArea();
+        chat.setCharacterWidth(Window.getClientWidth() / 18);
+        chat.setVisibleLines(Window.getClientHeight() / 30);
+        chat.setEnabled(false);
+        chat.getElement().getStyle().setProperty("resize", "none");
+
+        HorizontalPanel chatEntryPanel = new HorizontalPanel();
+        TextBox chatEntry = new TextBox();
+        chatEntry.setVisibleLength(Window.getClientWidth() / 20);
+
+        Button send = new Button();
+        send.setText("Send");
+        send.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // Send text to server
+            }
+        });
+
+        // Horizontal panel below textarea
+        chatEntryPanel.add(chatEntry);
+        chatEntryPanel.add(send);
+
+        chatPanel.add(chat);
+        chatPanel.add(chatEntryPanel);
+
+        midPanel.add(playerList);
+        midPanel.add(chatPanel);
+
+        // Add static data
+        HorizontalPanel horiz = new HorizontalPanel();
+        horiz.setHeight("100%");
+        horiz.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+        Label author = new Label();
+        author.setText("Created by: Steven Gantz");
+        author.getElement().getStyle().setColor("white");
+        author.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        author.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 35, Unit.PX);
+        horiz.add(author);
+
+        // Build gui to gather data
+        lobbyPanel.add(title);
+        lobbyPanel.add(midPanel);
+        lobbyPanel.add(horiz);
+
     }
 
     /**

@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface MemoryGameServiceAsync {
     public void attemptHandshake(AsyncCallback<Boolean> callback);
     public void isGameRunning(AsyncCallback<Boolean> callback);
-    public void startLobby(AsyncCallback<Boolean> callback);
+    public void startLobby(String playerName, AsyncCallback<Boolean> callback);
     public void closeLobby(AsyncCallback<Boolean> callback);
     public void isLobbyRunning(AsyncCallback<Boolean> callback);
 }
