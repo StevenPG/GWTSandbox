@@ -1,5 +1,8 @@
 package stevengantz.server;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
@@ -23,7 +26,7 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
      * Contains data important to the current running game
      */
     ServerGameDataObject game;
-    
+
     /**
      * Contains data important to currently connected players
      */
@@ -44,6 +47,65 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
         this.config = config;
         this.game = new ServerGameDataObject();
         players = new PlayerContainer();
+    }
+
+    /**
+     * Retrieve the current players in the lobby for display in client.
+     * 
+     * @return list of the current players
+     */
+    @Override
+    public ArrayList<String> getCurrentPlayers() {
+        return this.players.getPlayers();
+    }
+
+    /**
+     * Sends a message into the chat log, which is then returned to client for
+     * display. The server does the work of converting the arraylist into a
+     * string for the client. If the message entered is "clear", the chat is
+     * globally cleared.
+     */
+    @Override
+    public String addToChat(String sender, String msg) {
+
+        // Empty the chat log if clear command comes through
+        if (msg.equals("\"clear\"")) {
+            this.game.lobbychat.clear();
+            this.game.lobbychat.add("Chat Log Cleared...");
+            return this.game.lobbychat.get(0);
+        }
+
+        // Build message and save
+        StringBuilder msgbuilder = new StringBuilder();
+        msgbuilder.append(new Date());
+        msgbuilder.append(" : ");
+        msgbuilder.append(sender);
+        msgbuilder.append(" : ");
+        msgbuilder.append(msg);
+        msgbuilder.append("\n");
+        this.game.lobbychat.add(msgbuilder.toString());
+
+        // Break the lobbychat into a string to display
+        StringBuilder chatbuilder = new StringBuilder();
+        for (String line : this.game.lobbychat) {
+            chatbuilder.append(line);
+        }
+        return chatbuilder.toString();
+    }
+
+    /**
+     * Retrieves the current chat log and turns into a string for display. This
+     * is used when the client updates the chat log, now while entering a new
+     * message.
+     */
+    @Override
+    public String getChat() {
+        // Break the lobbychat into a string to display
+        StringBuilder chatbuilder = new StringBuilder();
+        for (String line : this.game.lobbychat) {
+            chatbuilder.append(line);
+        }
+        return chatbuilder.toString();
     }
 
     /**
@@ -75,23 +137,51 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
     public void startLobby(String PlayerName) {
         this.game.startLobby();
         this.players.PlayerNames.add(PlayerName);
-        
-        // DEBUG
-        // Empty the list so it doesn't fill up, and close lobby
-        this.players.PlayerNames.clear();
-        this.game.closeLobby();
     }
-    
+
+    /**
+     * Join a pre-created game lobby before game if there is no game currently
+     * running and there is a lobby running. Also cannot join if there are already
+     * four players in the lobby. 
+     * 
+     *  There is a secret command that will claer out the server. If you attempt to join
+     *  with the name, "wipeserver", all current players with disconnect.
+     */
+    @Override
+    public boolean joinLobby(String PlayerName) {
+        if(PlayerName.equals("\"wipeserver\"")){
+            this.players.PlayerNames.clear();
+            this.closeLobby();
+            return false;
+        }
+        
+        if(this.players.getPlayers().size() >= 4){
+            // Can't join, lobby is full.
+            return false;
+        }
+        
+        if (!this.game.isGameRunning() && this.isLobbyRunning()) {
+            // Lobby is open, successfully joined
+            this.players.PlayerNames.add(PlayerName);
+            return true;
+        } else {
+            // Game is running, can't join
+            return false;
+        }
+    }
+
     /**
      * Stop game lobby completely
      */
     @Override
-    public void closeLobby(){
+    public void closeLobby() {
         this.game.closeLobby();
+        this.players.PlayerNames.clear();
     }
-    
+
     /**
      * Return whether or not there is an open lobby
+     * 
      * @see stevengantz.client.MemoryGameService#isLobbyRunning()
      */
     @Override

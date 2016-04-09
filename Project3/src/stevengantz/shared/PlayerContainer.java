@@ -19,4 +19,17 @@ public class PlayerContainer {
     public PlayerContainer(){
         PlayerNames = new ArrayList<>();
     }
+    
+    public ArrayList<String> getPlayers(){
+        if(PlayerNames.size() > 4){
+            ArrayList<String> firstFourList = new ArrayList<String>();
+            firstFourList.add(PlayerNames.get(0));
+            firstFourList.add(PlayerNames.get(1));
+            firstFourList.add(PlayerNames.get(2));
+            firstFourList.add(PlayerNames.get(3));
+            return firstFourList;
+        } else {
+            return PlayerNames;
+        }
+    }
 }

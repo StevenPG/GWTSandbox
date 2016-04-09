@@ -1,5 +1,7 @@
 package stevengantz.shared;
 
+import java.util.ArrayList;
+
 /**
  * @author Steven Gantz This class will be stored in the server and contain all
  *         information required to keep track of the single game being played
@@ -26,6 +28,11 @@ public class ServerGameDataObject {
      * Boolean declaring whether a lobby exists
      */
     private boolean isLobbyStarted;
+    
+    /**
+     * The list containing all of the strings in the chat log.
+     */
+    public ArrayList<String> lobbychat;
 
     /**
      * @return the isLobbyStarted
@@ -62,6 +69,7 @@ public class ServerGameDataObject {
         this.isGameRunning = false;
         this.totalPlayers = 0;
         this.allowToJoin = true;
+        this.lobbychat = new ArrayList<String>();
     }
 
     /**

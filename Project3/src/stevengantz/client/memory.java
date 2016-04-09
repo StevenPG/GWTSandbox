@@ -10,6 +10,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -20,6 +23,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.media.client.Audio;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -66,6 +70,11 @@ public class memory implements EntryPoint {
      * Open connection to server with deferred binding RPC class
      */
     MemoryGameServiceAsync gameServer;
+
+    /**
+     * The name of the person who created a lobby
+     */
+    String hostPlayerName;
 
     /**
      * Contain the driver at a high level for easier access throughout code
@@ -200,25 +209,7 @@ public class memory implements EntryPoint {
         final TextBox handle = new TextBox();
         handle.setText("Enter name");
         final Button internet = new Button("Attempting to Connect to Server...");
-        internet.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                gameServer.startLobby(handle.getText().toString(), new AsyncCallback<Boolean>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        Window.alert(caught.getMessage());
-                        Window.alert(String.valueOf(caught.getStackTrace()));
-                    }
 
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        return;
-                    }
-                });
-
-                multiplayerLobbyMenu();
-            }
-        });
         internetPanel.add(internet);
         internetPanel.add(handle);
 
@@ -313,6 +304,8 @@ public class memory implements EntryPoint {
         });
 
         // See if there is an available lobby, if not, button may create one
+        // The internet button's handler is defined here based on whether lobby
+        // exists
         this.gameServer.isLobbyRunning(new AsyncCallback<Boolean>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -322,9 +315,53 @@ public class memory implements EntryPoint {
             @Override
             public void onSuccess(Boolean isLobbyActive) {
                 if (isLobbyActive) {
+                    // Add click handler for join button
                     internet.setText("Join multiplayer lobby");
+                    internet.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            gameServer.joinLobby(handle.getText().toString(), new AsyncCallback<Boolean>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    Window.alert(caught.getMessage());
+                                    Window.alert(String.valueOf(caught.getStackTrace()));
+                                }
+
+                                @Override
+                                public void onSuccess(Boolean result) {
+                                    if (result) {
+                                        hostPlayerName = handle.getText().toString();
+                                        multiplayerLobbyMenu();
+                                    } else {
+                                        internet.setText("Lobby is full... Try again later");
+                                    }
+                                }
+                            });
+                        }
+                    });
                 } else {
                     internet.setText("Start multiplayer lobby");
+                    internet.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            gameServer.startLobby(handle.getText().toString(), new AsyncCallback<Boolean>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    Window.alert(caught.getMessage());
+                                    Window.alert(String.valueOf(caught.getStackTrace()));
+                                }
+
+                                @Override
+                                public void onSuccess(Boolean result) {
+                                    return;
+                                }
+                            });
+                            hostPlayerName = handle.getText().toString();
+                            if (!hostPlayerName.equals("\"wipeserver\"")) {
+                                multiplayerLobbyMenu();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -351,49 +388,95 @@ public class memory implements EntryPoint {
         VerticalPanel playerList = new VerticalPanel();
 
         // Create player listings
-        Label test1 = new Label("You");
-        Label test2 = new Label("Vacant Player");
-        Label test3 = new Label("Vacant Player");
-        Label test4 = new Label("Vacant Player");
+        final Label player1 = new Label(this.hostPlayerName);
+        final Label player2 = new Label("");
+        final Label player3 = new Label("");
+        final Label player4 = new Label("");
 
         // Set label attributes
-        test1.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
-        test1.getElement().getStyle().setColor("white");
-        test1.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
-        test2.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
-        test2.getElement().getStyle().setColor("white");
-        test2.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
-        test3.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
-        test3.getElement().getStyle().setColor("white");
-        test3.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
-        test4.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
-        test4.getElement().getStyle().setColor("white");
-        test4.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        player1.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        player1.getElement().getStyle().setColor("white");
+        player1.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        player2.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        player2.getElement().getStyle().setColor("white");
+        player2.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        player3.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        player3.getElement().getStyle().setColor("white");
+        player3.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
+        player4.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
+        player4.getElement().getStyle().setColor("white");
+        player4.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
 
         // Add player listings to panel
-        playerList.add(test1);
-        playerList.add(test2);
-        playerList.add(test3);
-        playerList.add(test4);
+        playerList.add(player1);
+        playerList.add(player2);
+        playerList.add(player3);
+        playerList.add(player4);
 
         // Create chat box
         VerticalPanel chatPanel = new VerticalPanel();
-        TextArea chat = new TextArea();
+        final TextArea chat = new TextArea();
         chat.setCharacterWidth(Window.getClientWidth() / 18);
         chat.setVisibleLines(Window.getClientHeight() / 30);
+        chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
         chat.setEnabled(false);
         chat.getElement().getStyle().setProperty("resize", "none");
 
         HorizontalPanel chatEntryPanel = new HorizontalPanel();
-        TextBox chatEntry = new TextBox();
+        final TextBox chatEntry = new TextBox();
+        chatEntry.addKeyPressHandler(new KeyPressHandler() {
+            @Override
+            public void onKeyPress(KeyPressEvent event) {
+                if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+
+                    // Send message to server and retrieve new message
+                    gameServer.addToChat(hostPlayerName, chatEntry.getText().toString(), new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert("Error sending...\n" + caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String chatString) {
+                            // Empty the chat log
+                            chat.setText("");
+                            chat.setText(chatString);
+                            chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                        }
+                    });
+
+                    // Clear the chat box after retrieving it
+                    chatEntry.setText("");
+                }
+            }
+        });
         chatEntry.setVisibleLength(Window.getClientWidth() / 20);
 
-        Button send = new Button();
+        final Button send = new Button();
         send.setText("Send");
         send.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // Send text to server
+
+                // Send message to server and retrieve new message
+                gameServer.addToChat(hostPlayerName, chatEntry.getText().toString(), new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Error sending...\n" + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(String chatString) {
+                        // Empty the chat log
+                        chat.setText("");
+                        chat.setText(chatString);
+                        chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                    }
+
+                });
+
+                // Clear the chat box after retrieving it
+                chatEntry.setText("");
             }
         });
 
@@ -423,6 +506,51 @@ public class memory implements EntryPoint {
         lobbyPanel.add(midPanel);
         lobbyPanel.add(horiz);
 
+        // After created, occasionally retrieve new data from server
+        Timer updateTimer = new Timer() {
+            @Override
+            public void run() {
+                // Retrieve messages
+                gameServer.getChat(new AsyncCallback<String>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Couldn't get chat: \n" + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(String result) {
+                        chat.setText("");
+                        chat.setText(result);
+                        chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                    }
+                });
+
+                // Get the names of first four connected players
+                gameServer.getCurrentPlayers(new AsyncCallback<ArrayList<String>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Couldn't retrieve other players: \n" + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(ArrayList<String> serverPlayerList) {
+                        try {
+                            player1.setText(serverPlayerList.get(0));
+                            player2.setText(serverPlayerList.get(1));
+                            player3.setText(serverPlayerList.get(2));
+                            player4.setText(serverPlayerList.get(3));
+                        } catch (NullPointerException npe) {
+                            // Exceptions shouldn't be used for control flow.
+                            // This is a good example of that!
+                            return;
+                        }
+                    }
+                });
+            }
+        };
+
+        // Schedule to repeat until it is destroyed when game starts
+        updateTimer.scheduleRepeating(1000);
     }
 
     /**
