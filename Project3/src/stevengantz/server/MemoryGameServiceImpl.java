@@ -50,6 +50,19 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
     }
 
     /**
+     * Disconnects player from lobby so another can join.
+     * 
+     * @param PlayerName
+     *            - the name of the caller to be removed from party
+     * @param callback
+     *            - the callback method for success or failure.
+     */
+    @Override
+    public void disconnectFromLobby(String PlayerName) {
+        players.PlayerNames.remove(PlayerName);
+    }
+
+    /**
      * Retrieve the current players in the lobby for display in client.
      * 
      * @return list of the current players
@@ -141,28 +154,29 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
 
     /**
      * Join a pre-created game lobby before game if there is no game currently
-     * running and there is a lobby running. Also cannot join if there are already
-     * four players in the lobby. 
+     * running and there is a lobby running. Also cannot join if there are
+     * already four players in the lobby.
      * 
-     *  There is a secret command that will claer out the server. If you attempt to join
-     *  with the name, "wipeserver", all current players with disconnect.
+     * There is a secret command that will claer out the server. If you attempt
+     * to join with the name, "wipeserver", all current players with disconnect.
      */
     @Override
     public boolean joinLobby(String PlayerName) {
-        if(PlayerName.equals("\"wipeserver\"")){
+        if (PlayerName.equals("\"wipeserver\"")) {
             this.players.PlayerNames.clear();
             this.closeLobby();
             return false;
         }
-        
-        if(this.players.getPlayers().size() >= 4){
+
+        if (this.players.getPlayers().size() >= 4) {
             // Can't join, lobby is full.
             return false;
         }
-        
+
         if (!this.game.isGameRunning() && this.isLobbyRunning()) {
             // Lobby is open, successfully joined
             this.players.PlayerNames.add(PlayerName);
+            this.addToChat("System", PlayerName + " has joined the lobby.");
             return true;
         } else {
             // Game is running, can't join

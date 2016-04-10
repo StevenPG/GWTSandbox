@@ -48,17 +48,28 @@ public interface MemoryGameService extends RemoteService {
      * string for the client.
      */
     String addToChat(String sender, String msg);
-    
+
     /**
-     * Retrieves the current chat log and turns into a string for display.
-     * This is used when the client updates the chat log, now while entering a new message.
+     * Retrieves the current chat log and turns into a string for display. This
+     * is used when the client updates the chat log, now while entering a new
+     * message.
      */
     String getChat();
-    
+
     /**
      * Join a pre-created game lobby before game
      */
     boolean joinLobby(String PlayerName);
+
+    /**
+     * Disconnects player from lobby so another can join.
+     * 
+     * @param PlayerName
+     *            - the name of the caller to be removed from party
+     * @param callback
+     *            - the callback method for success or failure.
+     */
+    void disconnectFromLobby(String PlayerName);
 
     /**
      * Retrieve the current players in the lobby for display in client.

@@ -49,18 +49,28 @@ public interface MemoryGameServiceAsync {
      * string for the client.
      */
     public void addToChat(String sender, String msg, AsyncCallback<String> callback);
-    
+
     /**
-     * Retrieves the current chat log and turns into a string for display.
-     * This is used when the client updates the chat log, now while entering a new message.
+     * Retrieves the current chat log and turns into a string for display. This
+     * is used when the client updates the chat log, now while entering a new
+     * message.
      */
     public void getChat(AsyncCallback<String> callback);
-    
+
     /**
      * Join a pre-created game lobby before game
      */
     public void joinLobby(String PlayerName, AsyncCallback<Boolean> callback);
-    
+
+    /**
+     * Disconnects player from lobby so another can join.
+     * @param PlayerName
+     *            - the name of the caller to be removed from party
+     * @param callback
+     *            - the callback method for success or failure.
+     */
+    public void disconnectFromLobby(String PlayerName, AsyncCallback<Void> callback);
+
     /**
      * Retrieve the current players in the lobby for display in client.
      * 

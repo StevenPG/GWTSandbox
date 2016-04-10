@@ -25,6 +25,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -339,6 +340,30 @@ public class memory implements EntryPoint {
                             });
                         }
                     });
+                    handle.addKeyPressHandler(new KeyPressHandler() {
+                        @Override
+                        public void onKeyPress(KeyPressEvent event) {
+                            if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+                                gameServer.joinLobby(handle.getText().toString(), new AsyncCallback<Boolean>() {
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        Window.alert(caught.getMessage());
+                                        Window.alert(String.valueOf(caught.getStackTrace()));
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Boolean result) {
+                                        if (result) {
+                                            hostPlayerName = handle.getText().toString();
+                                            multiplayerLobbyMenu();
+                                        } else {
+                                            internet.setText("Lobby is full... Try again later");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
                 } else {
                     internet.setText("Start multiplayer lobby");
                     internet.addClickHandler(new ClickHandler() {
@@ -362,7 +387,31 @@ public class memory implements EntryPoint {
                             }
                         }
                     });
+                    handle.addKeyPressHandler(new KeyPressHandler() {
+                        @Override
+                        public void onKeyPress(KeyPressEvent event) {
+                            if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+                                gameServer.startLobby(handle.getText().toString(), new AsyncCallback<Boolean>() {
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        Window.alert(caught.getMessage());
+                                        Window.alert(String.valueOf(caught.getStackTrace()));
+                                    }
+
+                                    @Override
+                                    public void onSuccess(Boolean result) {
+                                        return;
+                                    }
+                                });
+                                hostPlayerName = handle.getText().toString();
+                                if (!hostPlayerName.equals("\"wipeserver\"")) {
+                                    multiplayerLobbyMenu();
+                                }
+                            }
+                        }
+                    });
                 }
+
             }
         });
 
@@ -387,11 +436,28 @@ public class memory implements EntryPoint {
         // Create player listing panel
         VerticalPanel playerList = new VerticalPanel();
 
+        // Create player horizontal panels
+        HorizontalPanel player1Panel = new HorizontalPanel();
+        HorizontalPanel player2Panel = new HorizontalPanel();
+        HorizontalPanel player3Panel = new HorizontalPanel();
+        HorizontalPanel player4Panel = new HorizontalPanel();
+
         // Create player listings
         final Label player1 = new Label(this.hostPlayerName);
         final Label player2 = new Label("");
         final Label player3 = new Label("");
         final Label player4 = new Label("");
+
+        // Create ready buttons
+        final Image player1Ready = new Image(Appdata.READY);
+        final Image player2Ready = new Image(Appdata.READY);
+        final Image player3Ready = new Image(Appdata.READY);
+        final Image player4Ready = new Image(Appdata.READY);
+
+        // hide other buttons
+        player2Ready.setVisible(false);
+        player3Ready.setVisible(false);
+        player4Ready.setVisible(false);
 
         // Set label attributes
         player1.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 225, Unit.EM);
@@ -407,11 +473,23 @@ public class memory implements EntryPoint {
         player4.getElement().getStyle().setColor("white");
         player4.getElement().getStyle().setProperty("textShadow", "2px 2px 2px #000");
 
-        // Add player listings to panel
-        playerList.add(player1);
-        playerList.add(player2);
-        playerList.add(player3);
-        playerList.add(player4);
+        // Add player listings to panels
+        player1Panel.add(player1);
+        player1Panel.add(player1Ready);
+
+        player2Panel.add(player2);
+        player2Panel.add(player2Ready);
+
+        player3Panel.add(player3);
+        player3Panel.add(player3Ready);
+
+        player4Panel.add(player4);
+        player4Panel.add(player4Ready);
+
+        playerList.add(player1Panel);
+        playerList.add(player2Panel);
+        playerList.add(player3Panel);
+        playerList.add(player4Panel);
 
         // Create chat box
         VerticalPanel chatPanel = new VerticalPanel();
@@ -490,6 +568,28 @@ public class memory implements EntryPoint {
         midPanel.add(playerList);
         midPanel.add(chatPanel);
 
+        // Add single panel for disconnect button
+        HorizontalPanel disconnectPanel = new HorizontalPanel();
+        final Button disconnect = new Button("Disconnect from lobby");
+        disconnect.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // disconnect from server
+                gameServer.disconnectFromLobby(hostPlayerName, new AsyncCallback<Void>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Failed to disconnect from game: " + caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(Void result) {
+                        Location.reload();
+                    }
+                });
+            }
+        });
+        disconnectPanel.add(disconnect);
+
         // Add static data
         HorizontalPanel horiz = new HorizontalPanel();
         horiz.setHeight("100%");
@@ -501,9 +601,104 @@ public class memory implements EntryPoint {
         author.getElement().getStyle().setFontSize(Appdata.WINDOWHEIGHT / 35, Unit.PX);
         horiz.add(author);
 
+        // Add onclicks for buttons to set as ready
+        player1Ready.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (hostPlayerName.equals(player1.getText().toString())) {
+                    gameServer.addToChat(hostPlayerName, player1.getText().toString() + " is ready...",
+                            new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String chatString) {
+                            // Empty the chat log
+                            chat.setText("");
+                            chat.setText(chatString);
+                            chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                        }
+
+                    });
+                }
+            }
+        });
+        player2Ready.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (hostPlayerName.equals(player2.getText().toString())) {
+
+                    gameServer.addToChat(hostPlayerName, player2.getText().toString() + " is ready...",
+                            new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String chatString) {
+                            // Empty the chat log
+                            chat.setText("");
+                            chat.setText(chatString);
+                            chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                        }
+                    });
+                }
+            }
+        });
+        player3Ready.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                if (hostPlayerName.equals(player3.getText().toString())) {
+                    gameServer.addToChat(hostPlayerName, player3.getText().toString() + " is ready...",
+                            new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String chatString) {
+                            // Empty the chat log
+                            chat.setText("");
+                            chat.setText(chatString);
+                            chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                        }
+                    });
+                }
+            }
+        });
+        player4Ready.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                if (hostPlayerName.equals(player4.getText().toString())) {
+                    gameServer.addToChat(hostPlayerName, player4.getText().toString() + " is ready...",
+                            new AsyncCallback<String>() {
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+
+                        @Override
+                        public void onSuccess(String chatString) {
+                            // Empty the chat log
+                            chat.setText("");
+                            chat.setText(chatString);
+                            chat.getElement().setScrollTop(chat.getElement().getScrollHeight());
+                        }
+                    });
+                }
+            }
+        });
+
         // Build gui to gather data
         lobbyPanel.add(title);
         lobbyPanel.add(midPanel);
+        lobbyPanel.add(disconnectPanel);
         lobbyPanel.add(horiz);
 
         // After created, occasionally retrieve new data from server
@@ -534,11 +729,28 @@ public class memory implements EntryPoint {
 
                     @Override
                     public void onSuccess(ArrayList<String> serverPlayerList) {
+                        // Empty all names so none stay
+                        player1.setText("");
+                        player1Ready.setVisible(false);
+                        player2.setText("");
+                        player2Ready.setVisible(false);
+                        player3.setText("");
+                        player3Ready.setVisible(false);
+                        player4.setText("");
+                        player4Ready.setVisible(false);
                         try {
                             player1.setText(serverPlayerList.get(0));
+                            if (!player1.getText().equals(""))
+                                player1Ready.setVisible(true);
                             player2.setText(serverPlayerList.get(1));
+                            if (!player1.getText().equals(""))
+                                player2Ready.setVisible(true);
                             player3.setText(serverPlayerList.get(2));
+                            if (!player1.getText().equals(""))
+                                player3Ready.setVisible(true);
                             player4.setText(serverPlayerList.get(3));
+                            if (!player1.getText().equals(""))
+                                player4Ready.setVisible(true);
                         } catch (NullPointerException npe) {
                             // Exceptions shouldn't be used for control flow.
                             // This is a good example of that!
@@ -546,11 +758,14 @@ public class memory implements EntryPoint {
                         }
                     }
                 });
+
+                // Retrieve all ready statuses and set ready or not for each
             }
         };
 
         // Schedule to repeat until it is destroyed when game starts
         updateTimer.scheduleRepeating(1000);
+
     }
 
     /**
