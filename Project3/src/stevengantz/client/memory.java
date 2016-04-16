@@ -142,6 +142,7 @@ public class memory implements EntryPoint {
      * it is finished running.
      */
     protected void closeMainMenuStartGame() {
+        
         // Remove the main menu
         RootLayoutPanel.get().clear();
 
@@ -153,7 +154,7 @@ public class memory implements EntryPoint {
 
         // Start GUI
         RootLayoutPanel.get().add(mainPanel);
-
+        
         // Begin game using driver's external method call
         driver.playGame();
 
@@ -571,6 +572,7 @@ public class memory implements EntryPoint {
         // Add single panel for disconnect button
         HorizontalPanel disconnectPanel = new HorizontalPanel();
         final Button disconnect = new Button("Disconnect from lobby");
+        final Button startGame = new Button("Start Game");
         disconnect.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -588,7 +590,36 @@ public class memory implements EntryPoint {
                 });
             }
         });
+        startGame.addClickHandler(new ClickHandler() {            
+            @Override
+            public void onClick(ClickEvent event) {
+                // Set number of players from server
+                // build playerlist
+                gameServer.getCurrentPlayers(new AsyncCallback<ArrayList<String>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Couldn't get players from server: " + caught.getMessage());                      
+                    }
+                    @Override
+                    public void onSuccess(ArrayList<String> serverPlayers) {
+                        ArrayList<Player> serverEntries = new ArrayList<Player>();
+                        
+                        // Add self as a human player                       
+                        for(String player : serverPlayers){
+                            if(player.equals(hostPlayerName)){
+                                serverEntries.add(new HumanPlayer(hostPlayerName));
+                            } else {
+                                serverEntries.add(new ComputerPlayer(player, 2));
+                            }
+                        }                       
+                        players = serverEntries;                    
+                        closeMainMenuStartGame();
+                    }
+                });
+            }
+        });
         disconnectPanel.add(disconnect);
+        disconnectPanel.add(startGame);
 
         // Add static data
         HorizontalPanel horiz = new HorizontalPanel();
@@ -754,6 +785,8 @@ public class memory implements EntryPoint {
                         } catch (NullPointerException npe) {
                             // Exceptions shouldn't be used for control flow.
                             // This is a good example of that!
+                            return;
+                        } catch (IndexOutOfBoundsException ibe){
                             return;
                         }
                     }

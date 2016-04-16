@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import stevengantz.client.MemoryGameService;
+import stevengantz.shared.CurrentGame;
 import stevengantz.shared.PlayerContainer;
 import stevengantz.shared.ServerGameDataObject;
 
@@ -31,6 +32,12 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
      * Contains data important to currently connected players
      */
     PlayerContainer players;
+    
+    /**
+     * Contains attributes and methods specific to the current played game.
+     * This object may be serialized and passed from client to server.
+     */
+    CurrentGame currentgame;
 
     /**
      * Server configuration for use in initialization
@@ -49,6 +56,31 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
         players = new PlayerContainer();
     }
 
+    /**
+     * Tell the server you've clicked start. Then poll on a timer to see if
+     * the game can start.
+     */
+    @Override
+    public void startGame(String PlayerName){
+        if(currentgame == null){
+            currentgame = new CurrentGame(game.getTotalPlayers());
+        } else {
+            currentgame.clickedStart++;
+            // If that was the final click, say the game is running
+            if(currentgame.clickedStart == currentgame.totalPlayers){
+                this.game.setGameRunning(true);
+            }
+        }
+    }
+    
+    /**
+     * Poll server if everyone has clicked start
+     */
+    @Override
+    public boolean haveAllStarted(){
+        return this.game.isGameRunning();
+    }
+    
     /**
      * Disconnects player from lobby so another can join.
      * 
@@ -164,6 +196,7 @@ public class MemoryGameServiceImpl extends RemoteServiceServlet implements Memor
     public boolean joinLobby(String PlayerName) {
         if (PlayerName.equals("\"wipeserver\"")) {
             this.players.PlayerNames.clear();
+            this.game.lobbychat.clear();
             this.closeLobby();
             return false;
         }

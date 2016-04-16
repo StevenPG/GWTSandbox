@@ -60,6 +60,17 @@ public interface MemoryGameService extends RemoteService {
      * Join a pre-created game lobby before game
      */
     boolean joinLobby(String PlayerName);
+    
+    /**
+     * Tell the server you've clicked start. Then poll on a timer to see if
+     * the game can start.
+     */
+    void startGame(String PlayerName);
+    
+    /**
+     * Poll server if everyone has clicked start
+     */
+    boolean haveAllStarted();
 
     /**
      * Disconnects player from lobby so another can join.

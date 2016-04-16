@@ -9,7 +9,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface MemoryGameServiceAsync {
 
-    // Pre game methods
+    /**
+     * Tell the server you've clicked start. Then poll on a timer to see if
+     * the game can start.
+     */
+    public void startGame(String playerName, AsyncCallback<Void> callback);
+    
+    /**
+     * Poll server if everyone has clicked start
+     */
+    public void haveAllStarted(AsyncCallback<Boolean> callback);
+    
     /**
      * Declare to the client that everything it working by returning nothing
      * 
