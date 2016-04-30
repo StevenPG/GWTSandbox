@@ -3,6 +3,7 @@ package stevengantz.client;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -46,6 +47,7 @@ import stevengantz.memory.player.ComputerPlayer;
 import stevengantz.memory.player.HumanPlayer;
 import stevengantz.memory.player.Player;
 import stevengantz.memory.structure.ContextMenu;
+import stevengantz.memory.structure.CustomAnimation;
 import stevengantz.memory.structure.MemoryGameBoard;
 import stevengantz.memory.structure.MemoryGameDriver;
 import stevengantz.memory.structure.MemoryLayoutPanel;
@@ -1085,36 +1087,56 @@ public class memory implements EntryPoint {
         Button volume0 = new Button("5%");
         volume0.addClickHandler(new ClickHandler() {
             @Override
-            public void onClick(ClickEvent event) {
-                audioTrack.setVolume(0.05);
+            public void onClick(ClickEvent event) {                
+                if(event.isShiftKeyDown()){
+                    
+                } else {
+                    audioTrack.setVolume(0.05);
+                }
             }
         });
         Button volume1 = new Button("25%");
         volume1.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                audioTrack.setVolume(0.25);
+                if(event.isShiftKeyDown()){
+                    Animation anim = new CustomAnimation(0);
+                } else {
+                    audioTrack.setVolume(0.25);
+                }
             }
         });
         Button volume2 = new Button("50%");
         volume2.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                audioTrack.setVolume(0.50);
+                if(event.isShiftKeyDown()){
+                    Animation anim = new CustomAnimation(1);
+                } else {
+                    audioTrack.setVolume(0.50);
+                }
             }
         });
         Button volume3 = new Button("75%");
         volume3.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                audioTrack.setVolume(0.75);
+                if(event.isShiftKeyDown()){
+                    Animation anim = new CustomAnimation(2);
+                } else {
+                    audioTrack.setVolume(0.75);
+                }
             }
         });
         Button volume4 = new Button("100%");
         volume4.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                audioTrack.setVolume(1);
+                if(event.isShiftKeyDown()){
+                    Animation anim = new CustomAnimation(3);
+                } else {
+                    audioTrack.setVolume(1);
+                }
             }
         });
 

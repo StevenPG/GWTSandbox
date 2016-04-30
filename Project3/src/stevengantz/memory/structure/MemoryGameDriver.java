@@ -78,6 +78,7 @@ public class MemoryGameDriver {
     public Audio cardFlipNoise;
     public Audio wrongNoise;
     public Audio matchNoise;
+    public Audio fireworksNoise;
 
     /**
      * This constructor uses an internal board of Memory cards to make changes
@@ -96,10 +97,12 @@ public class MemoryGameDriver {
         this.cardFlipNoise = Audio.createIfSupported();
         this.wrongNoise = Audio.createIfSupported();
         this.matchNoise = Audio.createIfSupported();
+        this.fireworksNoise = Audio.createIfSupported();
 
         this.cardFlipNoise.setSrc("flipcard.wav");
         this.wrongNoise.setSrc("wrong.wav");
         this.matchNoise.setSrc("match.wav");
+        this.fireworksNoise.setSrc("fireworkssound.mp3");
 
         // Retrieve game server connection
         this.gameServer = gameServer;
@@ -415,7 +418,8 @@ public class MemoryGameDriver {
             if (gamedata.firstCard.iswild && gamedata.secondCard.iswild) {
                 currentPlayer.addPoints(Appdata.MATCHWILDSPOINTS);
                 // TODO Play animation as per spec
-                Window.alert("You've matched two wild cards!!");
+                this.fireworksNoise.play();
+                Animation fw = new CustomAnimation(0);
             } else {
                 currentPlayer.addPoints(Appdata.POINTSPERMATCH);
             }
@@ -467,11 +471,6 @@ public class MemoryGameDriver {
      */
     protected boolean checkForWin() {
 
-        // TODO
-        // Play animation just for testing
-        Animation anim = new CustomAnimation();
-        anim.run(1000);
-
         // Check if two are left
         boolean isGameOver = this.board.checkIfBoardHasTwoLeft();
 
@@ -487,23 +486,39 @@ public class MemoryGameDriver {
                 builder.append(player.getPlayerName() + " took " + player.getTotalAttempts() + " turns to get "
                         + player.getTotalMatches() + " matches.\n");
             }
+            
+            final String stats = builder.toString();
 
-            String stats = builder.toString();
-
-            Window.alert("Display animation based on current user's score");
-
-            if (Window.confirm("Game over!\n" + stats + "\nPlay again? Cancel to quit.")) {
-                // Play again
-                Window.Location.reload();
-                RootLayoutPanel.get().clear();
-                Window.Location.reload();
-            } else {
-                if (Window.confirm("GWT provides no way to leave... Do you want to go to Google or something?")) {
-                    Window.Location.assign("https://www.google.com");
-                } else {
-                    Window.alert("Well I don't know where to send you... so just stay here!!");
+            Timer timer = new Timer() {
+                @Override
+                public void run() {
+                    if (Window.confirm("Game over!\n" + stats + "\nPlay again? Cancel to quit.")) {
+                        // Play again
+                        Window.Location.reload();
+                        RootLayoutPanel.get().clear();
+                        Window.Location.reload();
+                    } else {
+                        if (Window
+                                .confirm("GWT provides no way to leave... Do you want to go to Google or something?")) {
+                            Window.Location.assign("https://www.google.com");
+                        } else {
+                            Window.alert("Well I don't know where to send you... so just stay here!!");
+                        }
+                    }
                 }
+            };
+
+            if (this.players.get(0).getTotalPoints() >= 200) {
+                Animation anim = new CustomAnimation(3);
+                timer.schedule(15000);
+            } else if (this.players.get(0).getTotalPoints() < 200) {
+                Animation anim = new CustomAnimation(2);
+                timer.schedule(6000);
+            } else if (this.players.get(0).getTotalPoints() < 100) {
+                Animation anim = new CustomAnimation(1);
+                timer.schedule(6000);
             }
+
             return true;
 
         } else {// Otherwise don't add any points
