@@ -15,6 +15,13 @@ automagically check for a match. If there is a match, you will
 earn a match point and the cards will stay within view. If you
 do not get a match, the cards will flip back over.
 
+If you want to join a lobby (internet play doesn't work), select start or join
+game. If the button says join game, a lobby already exists. If it says start, you will
+be the first person in the lobby.
+
+	1a. You can type "wipeserver" into the multiplayer text box to restart the server internally
+	1b. You can also type "clear" into the chat box to clear the chat log
+
 There are general instructions on the right side of the board.
 
 You may use cheats if you'd like, they are located in the top right corner.
@@ -24,9 +31,14 @@ undo the cheat.
 Information on each player is available on the left sidebar.
 
 Note:
-  For some reason, GWT will not always run the Window.Location.reload()
+  1. For some reason, GWT will not always run the Window.Location.reload()
   command when the game ends. I have not been able to figure out why this
   bug occurs, but the game normally reloads successfully when OK is pressed.
+  
+  2. You can test the animations by holding down shift and selecting the volume controls.
+  
+  3. I was unable to get four player multiplayer working. In hindsight I think I should have
+	just implemented 2 player, but I was able to get 4 players into a lobby together.
 
 IMPLEMENTATION_DETAILS:
 - The game is controlled through game state phases.
